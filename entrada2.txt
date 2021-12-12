@@ -1,0 +1,9 @@
+int a, b, c =2
+int a, b, c =2
+int ancho
+int b
+int main(){
+    int a 
+    pow(a^3,4)
+
+}

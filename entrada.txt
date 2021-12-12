@@ -1,0 +1,154 @@
+int a, b, c
+
+int ancho
+int b
+
+void llamar(int a, int b){
+  
+  if (4<2){
+    Rectangulo a
+
+    for numero in arr[2:4]{
+   
+    }
+  } elseif (5>4){
+    Rectangulo a = a(3,4, Rectangulo.ancho)
+    int a, b, c 
+    
+  } elseif (5 =="sdg"){
+
+  }
+  else {
+      int d = sin((a+b))
+  }
+}
+
+int a, b, c 
+int a, b, c 
+int ancho
+int b
+
+void llamar(int a, int b){
+  
+  (3==a || 9>persona.edad) ? a+b : a+c
+
+  if (4<2 && (a+b)>= 3){
+    Rectangulo a
+
+    for numero in arr[2:4]{
+   
+    }
+  } else if (5>4){
+    Rectangulo a = a(3,4, Rectangulo.ancho)
+    Rectangulo a = a(3,4, Rectangulo.ancho)
+    int a=2
+    int a, b, c
+    
+  } else if (5 =="sdg"){
+
+  }
+  else {
+      int d = sin((a+b))
+  }
+}
+
+void main (){
+  int a = "sgd"
+  int c =0
+  int d = sin((a+b))
+
+  
+  int a, b, c
+  int a, b, c
+  int a, b, c
+  int e
+  int f 
+  
+  Rectangulo a
+  Rectangulo a = a(3,4)
+  Rectangulo a = a(3,4, Rectangulo.ancho)
+
+  if (4<2){
+    Rectangulo a
+
+    for numero in arr[2:4]{
+   
+    }
+  } else if (5>4){
+    Rectangulo a = a(3,4, Rectangulo.ancho)
+    int a, b
+    
+  } else if (5 =="sdg"){
+
+  }
+  else {
+      int d = sin((a+b))
+  }
+
+  if (4<2 || a != fruta.color && (5+d)>5 ){
+    Rectangulo a
+  }
+
+  for (int i=0; i<arr.length(); i++){
+      String d =cadena.toLowercase()
+      d = arr.length()
+  }
+
+  for (i=0; i<=7; i++){
+    if (4<2 || a != fruta.color && (5+d)>5 ){
+      
+      Rectangulo a
+      
+    }
+  }
+
+  for it in a[3:6]{
+    for numero in arr[2:4]{
+      int a = 0+2
+      int a = 0
+      Rectangulo a
+      int a, b, c =2
+      Rectangulo a
+      
+    }
+  }
+
+  for numero in arr[2:4]{
+   a = f+v 
+   a = f+v 
+  }
+
+  while( fruta.color != "rojo"){
+    a = f+v 
+    llamar()
+  }
+
+  do {
+    print("listas")
+    println("listas")
+    int []arr =[1,2,[1,2,3],[2,3,4]]
+  }while(t>0 || t<=4)
+}
+
+
+struct Rectangulo{
+    int base,
+    int b
+    
+}
+
+
+
+struct Rectangulo{
+    int base,
+    int b
+    
+}
+
+
+
+
+
+
+
+

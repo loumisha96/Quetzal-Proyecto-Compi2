@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+	<title>Proyecto1</title>
+	<link rel="stylesheet" href="estilos.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.52.2/codemirror.min.css"></link>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.52.2/codemirror.min.js"></script>
+	<script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+	<script src="index.js"></script>
+
+
+    <!-- Exportar clases -->
+    <script src="expresiones/Aritmetica.js"></script>
+    <script src="expresiones/Trigonometrica.js"></script>
+    <script src="expresiones/arreglo.js"></script>
+    <script src="expresiones/logica.js"></script>
+    <script src="expresiones/nativas.js"></script>
+    <script src="expresiones/operacion.js"></script>
+    <script src="expresiones/relacional.js"></script>
+    <script src="expresiones/Literal.js"></script>
+    <script src="expresiones/valor.js"></script>
+    <script src="globales/AsignacionExpr.js"></script>
+    <script src="globales/asignacionArray.js"></script>
+    <script src="globales/asignacionAttrb.js"></script>
+    <script src="globales/attributosStructExpr.js"></script>
+    <script src="globales/attributosStructStruct.js"></script>
+    <script src="globales/call.js"></script>
+    <script src="globales/DeclaracionExpr.js"></script>
+    <script src="globales/declaracionArray.js"></script>
+    <script src="globales/DeclaracionStruct2.js"></script>
+    <script src="globales/DeclaracionStruct.js"></script>
+    <script src="globales/funcion.js"></script>
+    <script src="globales/main.js"></script>
+    <script src="globales/struct.js"></script>
+    <script src="instruccion/for/for.js"></script>
+    <script src="instruccion/for/forvar.js"></script>
+    <script src="instruccion/for/forvar1.js"></script>
+    <script src="instruccion/for/forvar2.js"></script>
+    <script src="instruccion/foreach/foreach.js"></script>
+    <script src="instruccion/while.js"></script>
+    <script src="instruccion/dowhile.js"></script>
+    <script src="instruccion/Print.js"></script>
+    <script src="instruccion/foreach/foreach1.js"></script>
+    <script src="instruccion/Ternario.js"></script>
+    <script src="instruccion/if/if.js"></script>
+    <script src="instruccion/if/else.js"></script>
+    <script src="instruccion/if/elseif.js"></script>
+    <script src="instruccion/switch/case.js"></script>
+    <script src="instruccion/switch/switch.js"></script>
+    <script src="otros/atributo.js"></script>
+    <script src="otros/parametro.js"></script>
+    <script src="otros/tipos.js"></script>
+    <script src="expresiones/nativas.js"></script>
+    <script src="globales/DeclaracionVarios.js"></script>
+    <script src="tablaSimbolos/entorno.js"></script>
+    <script src="tablaSimbolos/simbolo.js"></script>
+    <script src="ast/Ast.js"></script>
+    
+    
+    
+    <script src="gramatica.js"></script>
+</head>
+<body>
+	<div class="wrap">
+		<ul class="tabs">
+			<li><a href="#tab1"><span class="fa fa-home"></span><span class="tab-text">Inicio</span></a></li>
+			<li><a href="#tab2"><span class="fa fa-group"></span><span class="tab-text">Nosotros</span></a></li>
+			<li><a href="#tab3"><span class="fa fa-briefcase"></span><span class="tab-text">Servicios</span></a></li>
+			<li><a href="#tab4"><span class="fa fa-bookmark"></span><span class="tab-text">Blog</span></a></li>
+		</ul>
+        <input type="button" value="AST" onclick="parsear()">
+        <ul class="tabs">
+            
+            <li><a onclick="parsear()">AST</a></li>
+            <li><a href="">CST</a></li>
+            <li><a href="">REPORTES</a></li>
+        </ul>
+		<div class="secciones">
+			<article id="tab1"  >
+				<h1>Inicio</h1>
+                    
+                    <div class="consolas" style="float: left; width: 50%" id="editor1"></div>
+                    <script>
+                        setearEditores("#editor1")
+                    </script>
+                    <div id="editor2" style="float: right; width: 50%">
+                        <script>
+                            setearEditores("#editor2")
+                        </script>
+                    </div>
+            </article>
+			<article id="tab2">
+				<div class="consolas" style="float: left; width: 50%" id="editor3"></div>
+                    <script>
+                        setearEditores("#editor3")
+                    </script>
+                    <div id="editor4" style="float: right; width: 50%">
+                        <script>
+                            setearEditores("#editor4")
+                        </script>
+                    </div>
+			</article>
+			<article id="tab3">
+				<h1>Servicios</h1>
+                <div class="consolas" style="float: left; width: 50%" id="editor5"></div>
+                    <script>
+                        setearEditores("#editor5")
+                    </script>
+                    <div id="editor6" style="float: right; width: 50%">
+                        <script>
+                            setearEditores("#editor6")
+                        </script>
+                    </div>
+			</article>
+			<article id="tab4">
+				<h1>Blog</h1>
+				<div class="consolas" style="float: left; width: 50%" id="editor7"></div>
+                    <script>
+                        setearEditores("#editor7")
+                    </script>
+                    <div id="editor8" style="float: right; width: 50%">
+                        <script>
+                            setearEditores("#editor8")
+                        </script>
+                    </div>
+			</article>
+		</div>
+	</div>
+</body>
+</html>
