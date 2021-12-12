@@ -18,7 +18,7 @@ var Simbolo = /** @class */ (function () {
     Simbolo.prototype.getValorImplicito = function (ent, ast) {
         if(typeof this.valor == "string" &&  ent.existe(this.valor)){
             var simAux2 = ent.getSimbolo(this.valor)
-            return  simAux2.getValorImplicito()
+            return  simAux2.getValorImplicito(ent, ast)
         }
         return this.valor;
     };

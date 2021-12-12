@@ -99,9 +99,9 @@
 %left 'mayor', 'menor', 'mayorIgual', 'menorIgual', 'diferent', 'equalEqual'
 
 
-
+%right 'pot',asterisk','div', 'mod'
 %left 'add', 'minus' /*binary*/
-%left 'pot',asterisk','div', 'mod'
+
 
 %left 'increment', 'decrement'
 %left 'corcheteIzq'
@@ -309,21 +309,21 @@ DOWHILE
 ;
 
 FOR 
-	:for parIzq FORVAR ptcoma FORVAR1 ptcoma FORVAR2 parDer llaIzq INSTRUCCIONES llaDer{$$ = new for_($3, $5,$7, $10, this._$.first_line,this._$.first_column, tipoInstr.For)}
+	:for parIzq FORVAR ptcoma FORVAR1 ptcoma FORVAR2 parDer llaIzq INSTRUCCIONES llaDer{$$ = new for_($3, [$5],$7, $10, this._$.first_line,this._$.first_column, tipoInstr.For)}
 	|for parIzq FORVAR ptcoma FORVAR1 ptcoma FORVAR2 parDer llaIzq llaDer   		   {$$ = new for_($3, $5,$7, [], this._$.first_line,this._$.first_column, tipoInstr.For)}
 ;
 
 FORVAR
 	:id equal E																	{$$ = new AsignacionExpr($1, $3,this._$.first_line,this._$.first_column, tipoInstr.AsignacionExpr)}
-	|TIPO id equal E    														{$$ = new DeclaracionExpr($1, $2, $4, this._$.first_line,this._$.first_column, tipoInstr.DeclaracionExpr)}
+	|TIPO id equal E    														{ $$ = new DeclaracionExpr($1, $2, $4, this._$.first_line,this._$.first_column, tipoInstr.DeclaracionExpr)}
 ;
 
 FORVAR1
-		:id menor E   															{$$ = new relacional(new Literal($1, this._$.first_line,this._$.first_column, Valor.id),operador.menor, $3, this._$.first_line,this._$.first_column)}
-		|id mayor E   															{$$ = new relacional(new Literal($1, this._$.first_line,this._$.first_column, Valor.id),operador.mayor, $3, this._$.first_line,this._$.first_column)}
-		|id menorIgual E 														{$$ = new relacional(new Literal($1, this._$.first_line,this._$.first_column, Valor.id),operador.menorIgual, $3, this._$.first_line,this._$.first_column)}
-		|id mayorIgual E 														{$$ = new relacional(new Literal($1, this._$.first_line,this._$.first_column, Valor.id),operador.mayorIgual, $3, this._$.first_line,this._$.first_column)}
-		|id equal E  															{$$ = new relacional(new Literal($1, this._$.first_line,this._$.first_column, Valor.id),operador.equal, $3, this._$.first_line,this._$.first_column)}
+		:E menor E   															{$$ = new relacional($1,operador.menor, $3, this._$.first_line,this._$.first_column)}
+		|E mayor E   															{$$ = new relacional($1,operador.mayor, $3, this._$.first_line,this._$.first_column)}
+		|E menorIgual E 														{$$ = new relacional($1,operador.menorIgual, $3, this._$.first_line,this._$.first_column)}
+		|E mayorIgual E 														{$$ = new relacional($1,operador.mayorIgual, $3, this._$.first_line,this._$.first_column)}
+		|E equal E  															{$$ = new relacional($1,operador.equal, $3, this._$.first_line,this._$.first_column)}
 ;
 
 FORVAR2
@@ -339,7 +339,7 @@ FOREACH
 FOREACH1
 		:cadena                													{$$ = new Literal($1, this._$.first_line,this._$.first_column, Primitivo.String)}
 		|id																		{$$ = new Literal($1, this._$.first_line,this._$.first_column, Primitivo.String)}
-		|corcheteIzq VARIABLES corcheteDer
+		|corcheteIzq VARIABLES corcheteDer										{$$=$2}
 		|id corcheteIzq digits colon digits corcheteDer  						{$$ = new foreach1($1,$3, $5,this._$.first_line,this._$.first_column); }
 ;
 

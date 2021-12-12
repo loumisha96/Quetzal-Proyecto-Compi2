@@ -39,15 +39,15 @@ function parsear(){
 		console.log(contenido)
     } */
     var contenido = `
-    int a=7
-    int b = 2
-    int c = b
-    String animal = "perro"
     
     void main (){
-        for(int i =0; i<5; i++){
-            print(i)
+        String [] arr =["perro", "gato","conejo","ave"]
+        for animal in arr
+        {
+            println(animal)
+            
         }
+        
 
     }
     

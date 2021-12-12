@@ -8,6 +8,7 @@ var Literal = /** @class */ (function () {
     };
 
     Literal.prototype.getValorImplicito=function(){
+        
         return this.valor
     }
 

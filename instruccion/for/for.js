@@ -12,21 +12,28 @@ var for_ = /** @class */ (function () {
 
     for_.prototype.ejecutar= function(entorno, ast){
         this.var1.ejecutar(entorno, ast)
-        var v2 = this.var2.getValorImplicito(entorno, ast)
-        while(v2){
+
+        this.var2.forEach(cond => {
+            var v2 = cond.getValorImplicito(entorno,ast)
             if (typeof v2 == 'boolean'){
-                if(v2){
-                    const nuevoEnt = new Entorno(entorno)
-                    this.instrucciones.forEach(instruccion => {
-                        instruccion.ejecutar(nuevoEnt, ast)
-                    });
-                    this.var3.ejecutar(entorno,ast)
-                    v2 = this.var2.getValorImplicito(entorno, ast)
-                }else{
-                     return
+                while(v2){
+                    if (typeof v2 == 'boolean'){
+                        if(v2){
+                            const nuevoEnt = new Entorno(entorno)
+                            this.instrucciones.forEach(instruccion => {
+                                instruccion.ejecutar(nuevoEnt, ast)
+                            });
+                            this.var3.ejecutar(entorno,ast)
+                            v2 = cond.getValorImplicito(entorno, ast)
+                        }else{
+                             return
+                        }
+                    }
                 }
             }
-        }
+        })
+
+        
     }
 
     return for_;

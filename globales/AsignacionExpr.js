@@ -12,7 +12,7 @@ var AsignacionExpr = /** @class */ (function () {
     AsignacionExpr.prototype.ejecutar = function(entorno, ast){
         if (entorno.existe(this.id)){
             var sim =entorno.getSimbolo(this.id)
-            sim.setValor(this.expresion)
+            sim.setValor(this.expresion.getValorImplicito(entorno,ast))
         }else{
             console.log("Error semántico en Asignacion id: "+ this.id+" linea: " + this.linea +" column: " +this.column)
         }
