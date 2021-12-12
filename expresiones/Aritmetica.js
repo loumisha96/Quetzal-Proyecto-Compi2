@@ -1,13 +1,3 @@
-/* class Aritmetica {
-    constructor(expr1, op, expr2, linea, column, tipo){
-        this.expr1 = expr1;
-        this.operador = op;
-        this.expr2 = expr2;
-        this.linea = linea;
-        this.column = column;
-        this.tipo = tipo;
-    }
-}*/
 
 var Aritmetica = /** @class */ (function () {
     function Aritmetica(expr1, op, expr2, linea, column, tipo) {

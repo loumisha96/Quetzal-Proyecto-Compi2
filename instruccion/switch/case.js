@@ -8,5 +8,17 @@ var case_ = /** @class */ (function () {
         this.tipo = tipo;
         this.entorno = entorno;
     };
+    case_.prototype.getID= function(){
+        return this.valor
+    }
+    case_.prototype.getBreak = function(){
+        return this.break
+    }
+    case_.prototype.ejecutar = function(entorno, ast){
+        
+            this.instrucciones.forEach(instr => {
+                instr.ejecutar(entorno, ast)
+            });
+    }
     return case_;
 }());

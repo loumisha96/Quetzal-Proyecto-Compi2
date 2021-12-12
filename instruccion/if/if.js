@@ -6,9 +6,8 @@ var if_ = /** @class */ (function () {
         this.linea = linea;
         this.column = column;
         this.tipo = tipo;
-        
-
     };
+    
     if_.prototype.ejecutar = function(entorno, ast){
         
         this.condiciones.forEach(cond => {

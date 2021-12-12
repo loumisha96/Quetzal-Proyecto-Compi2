@@ -99,6 +99,8 @@ var operador;
     operador[operador["diferente"] = 12] = "diferente";
     operador[operador["not"] = 13] = "not";
     operador[operador["equalEqual"] = 14] = "equalEqual";
+    operador[operador["increment"] = 15] = "increment";
+    operador[operador["decrement"] = 16] = "decrement";
     
 })(operador || (operador = {}));
 

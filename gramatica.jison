@@ -257,7 +257,7 @@ CALL
 ;
 
 TERNARIO
-	: parIzq CONDICIONES parDer interrogacion E colon E   						{$$= new Ternario($2, $5, $7,this._$.first_line,this._$.first_column, tipoInstr.Ternario)}
+	: parIzq CONDICIONES parDer interrogacion INSTRUCCION colon INSTRUCCION  						{$$= new Ternario($2, $5, $7,this._$.first_line,this._$.first_column, tipoInstr.Ternario)}
 ;
 
 IF 
@@ -303,8 +303,8 @@ WHILE
 ;
 
 DOWHILE
-		:do llaIzq INSTRUCCIONES llaDer while parIzq CONDICIONES parDer	{$4 = new dowhile($3,$7,this._$.first_line,this._$.first_column, tipoInstr.DoWhile )}
-		|do llaIzq llaDer while parIzq CONDICIONES parDer 				{$4 = new dowhile([],$7,this._$.first_line,this._$.first_column, tipoInstr.DoWhile )}
+		:do llaIzq INSTRUCCIONES llaDer while parIzq CONDICIONES parDer	{$$ = new dowhile($3,$7,this._$.first_line,this._$.first_column, tipoInstr.DoWhile )}
+		|do llaIzq llaDer while parIzq CONDICIONES parDer 				{$$ = new dowhile([],$7,this._$.first_line,this._$.first_column, tipoInstr.DoWhile )}
 		
 ;
 
@@ -319,16 +319,16 @@ FORVAR
 ;
 
 FORVAR1
-		:id menor E   															{$$ = new forvar1($1,operador.menor, $3, this._$.first_line,this._$.first_column)}
-		|id mayor E   															{$$ = new forvar1($1,operador.mayor, $3, this._$.first_line,this._$.first_column)}
-		|id menorIgual E 														{$$ = new forvar1($1,operador.menorIgual, $3, this._$.first_line,this._$.first_column)}
-		|id mayorIgual E 														{$$ = new forvar1($1,operador.mayorIgual, $3, this._$.first_line,this._$.first_column)}
-		|id equal E  															{$$ = new forvar1($1,operador.equal, $3, this._$.first_line,this._$.first_column)}
+		:id menor E   															{$$ = new relacional(new Literal($1, this._$.first_line,this._$.first_column, Valor.id),operador.menor, $3, this._$.first_line,this._$.first_column)}
+		|id mayor E   															{$$ = new relacional(new Literal($1, this._$.first_line,this._$.first_column, Valor.id),operador.mayor, $3, this._$.first_line,this._$.first_column)}
+		|id menorIgual E 														{$$ = new relacional(new Literal($1, this._$.first_line,this._$.first_column, Valor.id),operador.menorIgual, $3, this._$.first_line,this._$.first_column)}
+		|id mayorIgual E 														{$$ = new relacional(new Literal($1, this._$.first_line,this._$.first_column, Valor.id),operador.mayorIgual, $3, this._$.first_line,this._$.first_column)}
+		|id equal E  															{$$ = new relacional(new Literal($1, this._$.first_line,this._$.first_column, Valor.id),operador.equal, $3, this._$.first_line,this._$.first_column)}
 ;
 
 FORVAR2
-		:id increment  															{$$= new forvar2($1, $2, this._$.first_line,this._$.first_column)}
-		|id decrement 														    {$$= new forvar2($1, $2, this._$.first_line,this._$.first_column)}
+		:id increment  															{$$= new unario($1, operador.increment, this._$.first_line,this._$.first_column)}
+		|id decrement 														    {$$= new unario($1, operador.decrement, this._$.first_line,this._$.first_column)}
 ;
 
 FOREACH
@@ -354,7 +354,8 @@ E
 		|NATIVA																	{$$=$1}
 		|id point id										
 		|OperarARRAY									    					{$$=$1}
-		
+		|id increment 															{$$ = new unario($1, operador.increment,this._$.first_line,this._$.first_column)}
+		|id decrement															{$$ = new unario($1, operador.decrement,this._$.first_line,this._$.first_column)}
 ;
 
 NATIVA

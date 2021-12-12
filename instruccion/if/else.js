@@ -8,7 +8,8 @@ var else_ = /** @class */ (function () {
     };
     else_.prototype.ejecutar = function (entorno, ast) {
         this.instrucciones.forEach(instr => {
-            instr.ejecutar(entorno, ast)
+            const nuevoEnt = new Entorno(entorno)
+            instr.ejecutar(nuevoEnt, ast)
         });
     }
     return else_;

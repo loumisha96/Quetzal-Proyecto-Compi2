@@ -12,7 +12,7 @@ var Print = /** @class */ (function () {
         if(typeof valor == "string" && entorno.existe(valor) ){
             var sim = entorno.getSimbolo(valor)
             
-            console.log(sim.valor.getValorImplicito(entorno, ast))
+            console.log(sim.getValorImplicito(entorno, ast))
         }else{
             console.log(valor)
         }

@@ -7,5 +7,17 @@ var Ternario = /** @class */ (function () {
         this.column = column;
         this.tipo = tipo;
     }
+    Ternario.prototype.ejecutar = function(entorno, ast){
+        this.condiciones.forEach(cond => {
+            var valor = cond.getValorImplicito(entorno,ast)
+            if (typeof valor == 'boolean'){
+                if(valor){
+                    this.expr1.ejecutar(entorno,ast)
+                }else{
+                    this.expr2.ejecutar(entorno,ast)
+                }
+            }
+        });
+    }
     return Ternario;
 }());

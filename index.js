@@ -39,19 +39,16 @@ function parsear(){
 		console.log(contenido)
     } */
     var contenido = `
-    int a
+    int a=7
     int b = 2
     int c = b
+    String animal = "perro"
     
     void main (){
-        if(3<2){
-            Print("Funciona")
-        }else if(c==2 && 2==2 && 2>3){
-            Print("Funciona2")
+        for(int i =0; i<5; i++){
+            print(i)
         }
-        else{
-            print("else")
-        }
+
     }
     
     `;

@@ -9,6 +9,9 @@ var DeclaracionExpr = /** @class */ (function () {
         
     };
 
+    DeclaracionExpr.prototype.getID=function(){
+        return this.id
+    }
     DeclaracionExpr.prototype.ejecutar = function(entorno, ast){
         if(!entorno.existe(this.id)){
             var simb = new Simbolo(this.tipoDeclaracion, this.id, this.linea, this.column, this.expresion.getValorImplicito(entorno, ast))
