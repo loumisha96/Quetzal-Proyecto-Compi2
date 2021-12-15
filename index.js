@@ -40,16 +40,18 @@ function parsear(){
     } */
     var contenido = `
     
-    void main (){
-        String [] arr =["perro", "gato","conejo","ave"]
-        for animal in arr
+    void main() {
+        int[] cadena =[["perro","gato2"], "gato", "ave", "tejón"]
+        for letra in [["perro","gato2"], "gato", "ave", "tejón"]
         {
-            println(animal)
-            
+            print(letra & " bonito")   
         }
         
-
+        for num in cadena{
+            print(num)
+        }
     }
+    
     
     `;
     //  console.log(contenido)
@@ -66,7 +68,7 @@ function ejecutar(instrucciones , entornoGlobal, ast){
         if(element.length>0){
                 ejecutar(element, entornoGlobal, ast)
         }else{
-            if(element.tipo == tipoInstr.Main || element.tipo == tipoInstr.Funcion){
+            if(element.tipo == tipoInstr.Main || element.tipo == tipoInstr.Funcion|| element.tipo == tipoInstr.Strutc){
                 const nuevoEnt = new Entorno(entornoGlobal)
                 element.ejecutar(nuevoEnt, ast)
             }else{

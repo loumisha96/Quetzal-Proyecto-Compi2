@@ -8,5 +8,13 @@ var Funcion = /** @class */ (function () {
         this.column = column;
         this.tipo = tipo;
     };
+    Funcion.prototype.getID=function(){
+        return this.id
+    }
+    Funcion.prototype.ejecutar=function(entorno,ast){
+        this.parametros.forEach(param => {
+            param.ejecutar(entorno,ast)
+        });
+    }
     return Funcion;
 }());

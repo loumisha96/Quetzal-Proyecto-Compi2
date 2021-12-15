@@ -21,7 +21,10 @@ var for_ = /** @class */ (function () {
                         if(v2){
                             const nuevoEnt = new Entorno(entorno)
                             this.instrucciones.forEach(instruccion => {
-                                instruccion.ejecutar(nuevoEnt, ast)
+                                //if(instruccion.tipo!= tipoInstr.break)
+                                    instruccion.ejecutar(nuevoEnt, ast)
+                               // else
+                                 //   break
                             });
                             this.var3.ejecutar(entorno,ast)
                             v2 = cond.getValorImplicito(entorno, ast)

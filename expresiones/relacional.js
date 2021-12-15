@@ -9,8 +9,8 @@ var relacional = /** @class */ (function () {
       //  this.entorno = entorno;
     };
     relacional.prototype.getValor = function(entorno, ast, expr){
-        var val =expr.getValorImplicito()
-        if(typeof val == "string"  ){
+        var val =expr.getValorImplicito(entorno,ast)
+        if(typeof val == "object" ){
             
             if(entorno.existeEnActual(val)){
                 var simAux2 = entorno.getSimbolo(val)
@@ -32,6 +32,7 @@ var relacional = /** @class */ (function () {
         var valor1 =this.getValor(entorno, ast, this.expr1)
         var valor2 = this.getValor(entorno, ast, this.expr2)
         if (typeof valor1 == 'number' && typeof valor2 == 'number'){
+            
             switch (this.operador) {
                 case operador.mayor:
                     return  (valor1 > valor2)? this.valor = true :  this.valor =false

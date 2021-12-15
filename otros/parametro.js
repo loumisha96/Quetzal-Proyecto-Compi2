@@ -8,5 +8,30 @@ var parametro = /** @class */ (function () {
         this.tipo = tipo;
         //this.entorno = entorno;
     };
+    parametro.prototype.ejecutar = function(entorno, ast){
+        
+        if(!entorno.existe(this.id)){
+            var simb = new Simbolo(this.tipo, this.id, this.linea, this.column, this.getValorDefault())
+            entorno.agregar(this.id,simb)
+        }else{
+            console.log("Error semántico en Declaracion id: "+ this.id+" linea: " + this.linea +" column: " +this.column)
+        }
+        
+    }
+
+    parametro.prototype.getValorDefault = function(){
+        switch (this.tipo) {
+            case Primitivo.int:
+                return 0;
+            case Primitivo.double:
+                return 0.0;
+            case Primitivo.boolean:
+                 return false;
+            case  Primitivo.String:
+                return "";
+            default:
+                return null;
+        }
+    }
     return parametro;
 }());

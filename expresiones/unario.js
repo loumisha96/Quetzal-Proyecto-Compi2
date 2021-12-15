@@ -15,7 +15,7 @@ var unario = /** @class */ (function () {
                 if(this.operador == operador.increment){
                     valor = valor+1
                     sim.setValor(valor)
-                }else{
+                }else if (this.operador == operador.decrement){
                     valor = valor-1
                     sim.setValor(valor)
                 }

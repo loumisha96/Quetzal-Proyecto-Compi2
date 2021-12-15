@@ -15,5 +15,8 @@ var foreach1 = /** @class */ (function () {
     foreach1.prototype.ejecutar = function(entorno, ast){
       return [this.id1, this.id2, this.id3]
     }
+    foreach1.prototype.getID = function(){
+        return this.id1;
+    }
     return foreach1;
 }());

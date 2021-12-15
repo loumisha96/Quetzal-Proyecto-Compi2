@@ -10,11 +10,16 @@ var DeclaracionStruct = /** @class */ (function () {
         
     };
     DeclaracionStruct.prototype.ejecutar = function(entorno, ast){
-        if(!entorno.existe()){
-            var simb = new Simbolo(this.tipoStruct, this.id, this.linea, this.column, )
-            entorno.agregar(this.id,simb)
+        if(ast.existeStruct(this.tipoStruct)){
+            if(!entorno.existe(this.id)){
+                var simb = new Simbolo(this.tipoStruct, this.id, this.linea, this.column,this.valores)
+                entorno.agregar(this.id,simb)
+            }else{
+                console.log("Error semántico en Declaracion struct: "+ this.id+" linea: " + this.linea +" column: " +this.column) 
+            }
+            
         }else{
-            console.log("Error semántico en Declaracion id: "+ this.id+" linea: " + this.linea +" column: " +this.column)
+            console.log("Error semántico en Declaracion struct: "+ this.id+" linea: " + this.linea +" column: " +this.column)
         }
     }
     return DeclaracionStruct;

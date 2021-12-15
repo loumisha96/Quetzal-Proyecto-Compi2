@@ -16,15 +16,17 @@ var Simbolo = /** @class */ (function () {
         return this.identificador;
     };
     Simbolo.prototype.getValorImplicito = function (ent, ast) {
-        if(typeof this.valor == "string" &&  ent.existe(this.valor)){
+        if(this.tipo ==Valor.id &&  ent.existe(this.valor)){
             var simAux2 = ent.getSimbolo(this.valor)
-            return  simAux2.getValorImplicito(ent, ast)
+            this.valor=  simAux2.getValorImplicito(ent, ast)
         }
         return this.valor;
     };
     Simbolo.prototype.setValor = function(val){
         this.valor = val
     }
-    
+    Simbolo.prototype.getValor = function(){
+        return this.valor
+    }
     return Simbolo;
 }());

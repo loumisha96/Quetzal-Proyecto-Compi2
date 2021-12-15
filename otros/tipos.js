@@ -49,6 +49,7 @@ var Valor;
     Valor[Valor["decimal"] = 2] = "decimal";
     Valor[Valor["id"] = 3] = "id";
     Valor[Valor["null"] = 4] = "null";
+    Valor[Valor["negativo"] = 5] = "negativo";
 })(Valor || (Valor = {}));
 
 var tipoF;
@@ -101,17 +102,20 @@ var operador;
     operador[operador["equalEqual"] = 14] = "equalEqual";
     operador[operador["increment"] = 15] = "increment";
     operador[operador["decrement"] = 16] = "decrement";
+   
     
 })(operador || (operador = {}));
 
 var Nativa;
 
 (function (Nativa) {
-    Nativa[Nativa["access"] = 0] = "access";
+    Nativa[Nativa["caracterOfPosition"] = 0] = "caracterOfPosition";
     Nativa[Nativa["subString"] = 1] = "subString";
     Nativa[Nativa["length"] = 2] = "length";
     Nativa[Nativa["toUppercase"] = 3] = "toUppercase";
     Nativa[Nativa["toLowercase"] = 4] = "toLowercase";
     Nativa[Nativa["pop"] = 5] = "pop";
     Nativa[Nativa["push"] = 6] = "push";
+    
+    
 })(Nativa || (Nativa = {}));

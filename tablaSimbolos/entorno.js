@@ -6,12 +6,12 @@ var Entorno = /** @class */ (function () {
         this.anterior = anterior;
     }
     Entorno.prototype.agregar = function (id, simbolo) {
-        id = id.toLowerCase();
+       // id = id.toLowerCase();
         simbolo.identificador = simbolo.identificador.toLowerCase();
         this.tabla[id] = simbolo;
     };
     Entorno.prototype.eliminar = function (id) {
-        id = id.toLowerCase();
+       // id = id.toLowerCase();
         for (var e = this; e != null; e = e.anterior) {
             var value = e.tabla[id];
             
@@ -23,7 +23,7 @@ var Entorno = /** @class */ (function () {
         return false;
     };
     Entorno.prototype.existe = function (id) {
-        id = id.toLowerCase();
+       // id = id.toLowerCase();
         for (var e = this; e != null; e = e.anterior) {
             var value = e.tabla[id];
             if (value !== undefined) {
@@ -33,14 +33,14 @@ var Entorno = /** @class */ (function () {
         return false;
     };
     Entorno.prototype.existeEnActual = function (id) {
-        id = id.toLowerCase();
+     //   id = id.toLowerCase();
         if (this.tabla[id] !== undefined) {
             return true;
         }
         return false;
     };
     Entorno.prototype.getSimbolo = function (id) {
-        id = id.toLowerCase();
+     //   id = id.toLowerCase();
         for (var e = this; e != null; e = e.anterior) {
             if (e.tabla[id] !== undefined) {
                 return e.tabla[id];
@@ -49,7 +49,7 @@ var Entorno = /** @class */ (function () {
         return null;
     };
     Entorno.prototype.reemplazar = function (id, nuevoValor) {
-        id = id.toLowerCase();
+      //  id = id.toLowerCase();
         for (var e = this; e != null; e = e.anterior) {
             var value = e.tabla[id];
             if (value !== undefined) {

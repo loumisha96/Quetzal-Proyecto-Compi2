@@ -10,7 +10,7 @@ var logica = /** @class */ (function () {
     };
     logica.prototype.getValor = function(entorno, ast, expr){
         var val =expr.getValorImplicito()
-        if(typeof val == "string"  ){
+        if(typeof val == "object"  ){
             
             if(entorno.existeEnActual(val)){
                 var simAux2 = entorno.getSimbolo(val)
@@ -48,6 +48,7 @@ var logica = /** @class */ (function () {
         
 
         if(typeof valor1 =='boolean' && typeof valor2 == 'boolean'){
+            
             switch (this.operador) {
                 case logica.and:
                     return  (valor1 && valor2)? this.valor = true :  this.valor =false

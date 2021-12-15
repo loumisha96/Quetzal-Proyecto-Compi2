@@ -40,6 +40,8 @@
 "/"         return 'div';
 "%"         return 'mod';
 "main"		return 'main';
+"begin"		return 'begin';
+"end"       return 'end';
 "in"		return 'in';
 "pow"		return 'pow';
 "sqrt"		return 'sqrt';
@@ -68,7 +70,7 @@
 "^"			return 'pot';
 "print"		return 'print';
 "println"   return 'println';
-"caracterOfPosition" return 'access';
+"caracterOfPosition" return 'caracterOfPosition';
 "continue"	return 'continue';
 "subString" return 'subString';
 "length"	return 'length';
@@ -93,17 +95,20 @@
 
 
 /* Asociación de operadores y precedencia */
-%right 'equal'
+%left 'add', 'minus' /*binary*/
+%left  'div', 'asterisk'
+%left 'pot', 'mod'
+
+
+
 %left 'or'
 %left 'and'
-%left 'mayor', 'menor', 'mayorIgual', 'menorIgual', 'diferent', 'equalEqual'
+%left 'equalEqual', 'diferent'
+%left 'mayor', 'menor', 'mayorIgual', 'menorIgual'
 
 
-%right 'pot',asterisk','div', 'mod'
-%left 'add', 'minus' /*binary*/
 
-
-%left 'increment', 'decrement'
+%left 'increment', 'decrement', 'menosU', 'not'
 %left 'corcheteIzq'
 %left 'parIzq', 'parDer', 'corcheteIzq', 'corcheteDer', 'llaIzq', 'llaDer'
 
@@ -337,36 +342,48 @@ FOREACH
 ;
 
 FOREACH1
-		:cadena                													{$$ = new Literal($1, this._$.first_line,this._$.first_column, Primitivo.String)}
-		|id																		{$$ = new Literal($1, this._$.first_line,this._$.first_column, Primitivo.String)}
+		:cadena                													{$$ = new Literal($1, this._$.first_line,this._$.first_column, Valor.cadena)}
+		|id																		{$$ = new Literal($1, this._$.first_line,this._$.first_column, Valor.id)}
 		|corcheteIzq VARIABLES corcheteDer										{$$=$2}
 		|id corcheteIzq digits colon digits corcheteDer  						{$$ = new foreach1($1,$3, $5,this._$.first_line,this._$.first_column); }
+		|id corcheteIzq begin colon end corcheteDer  						{$$ = new foreach1($1,$3, $5,this._$.first_line,this._$.first_column); }
 ;
 
 E
-		:E ARITMETICA E															{$$ = new Aritmetica($1, $2, $3, this._$.first_line,this._$.first_column); }
-		|parIzq E parDer														{$$=$1}
+		:E minus E																{$$ = new Aritmetica($1, operador.resta, $3, this._$.first_line,this._$.first_column);}
+		|E asterisk E															{$$ = new Aritmetica($1, operador.multiplicacion, $3, this._$.first_line,this._$.first_column);}
+		|E add E																{$$ = new Aritmetica($1, operador.suma, $3, this._$.first_line,this._$.first_column);}
+		|E asterisk E															{$$ = new Aritmetica($1, operador.multiplicacion, $3, this._$.first_line,this._$.first_column);}
+		|E pot E																{$$ = new Aritmetica($1, operador.potencia, $3, this._$.first_line,this._$.first_column);}
+		|E div E																{$$ = new Aritmetica($1, operador.division, $3, this._$.first_line,this._$.first_column);}
+		|E mod E																{$$ = new Aritmetica($1, operador.modulo, $3, this._$.first_line,this._$.first_column);}
+		|parIzq E parDer														{$$=$2}
 		|ARRAY																	{$$=$1}
 		|pow parIzq E comma E parDer											{$$ = new Aritmetica($3, operador.potencia, $5, this._$.first_line,this._$.first_column); }
 		|TRIGONOMETRICA parIzq E parDer											{$$ = new Trigonometrica($1,$3, this._$.first_line,this._$.first_column)}
 		|VALOR																	{$$=$1}
 		|numeral id											
 		|NATIVA																	{$$=$1}
-		|id point id										
+	//	|id point id	                                                        {console.log("expresion")}									
 		|OperarARRAY									    					{$$=$1}
 		|id increment 															{$$ = new unario($1, operador.increment,this._$.first_line,this._$.first_column)}
 		|id decrement															{$$ = new unario($1, operador.decrement,this._$.first_line,this._$.first_column)}
+		|E concat E 															{$$ = new concatenacion($1, $3, this._$.first_line,this._$.first_column); }
+		|minus E            %prec menosU                                        {$$ = new Literal($2, this._$.first_line,this._$.first_column, Valor.negativo); }
+		|E                                                                      {$$=$1}
 ;
 
 NATIVA
-	:id point access parIzq E parDer   					 						{$$= new nativa($1, $5, null, this._$.first_line,this._$.first_column, Nativa.access)}
-	|id point subString parIzq E comma E parDer			  						{$$= new nativa($1, $5, $7, this._$.first_line,this._$.first_column, Nativa.subString)}
-	|id point length parIzq parDer						 						{$$= new nativa($1,null, null, this._$.first_line,this._$.first_column, Nativa.length)}
-	|id point toUppercase parIzq parDer					 						{$$= new nativa($1,null, null, this._$.first_line,this._$.first_column, Nativa.toUppercase)}
-	|id point toLowercase parIzq parDer					 						{$$= new nativa($1,null, null, this._$.first_line,this._$.first_column, Nativa.toLowercase)}
-	|id point pop parIzq E parDer						 						{$$= new nativa($1, $5, $7, this._$.first_line,this._$.first_column, Nativa.pop)}
-	|id point push parIzq E parDer						  						{$$= new nativa($1, $5, $7, this._$.first_line,this._$.first_column, Nativa.push)}
+	:E point caracterOfPosition parIzq E parDer   					 			{$$= new nativa($1, $5, null, this._$.first_line,this._$.first_column, Nativa.caracterOfPosition)}
+	|E point subString parIzq E comma E parDer			  						{$$= new nativa($1, $5, $7, this._$.first_line,this._$.first_column, Nativa.subString)}
+	|E point length parIzq parDer						 						{$$= new nativa($1,null, null, this._$.first_line,this._$.first_column, Nativa.length)}
+	|E point toUppercase parIzq parDer					 						{$$= new nativa($1,null, null, this._$.first_line,this._$.first_column, Nativa.toUppercase)}
+	|E point toLowercase parIzq parDer					 						{$$= new nativa($1,null, null, this._$.first_line,this._$.first_column, Nativa.toLowercase)}
+	|E point pop parIzq  parDer						 							{$$= new nativa($1, null, $7, this._$.first_line,this._$.first_column, Nativa.pop)}
+	|E point push parIzq E parDer						  						{$$= new nativa($1, $5, $7, this._$.first_line,this._$.first_column, Nativa.push)}
 ;
+
+
 
 OperarARRAY
 		:TRIGONOMETRICA numeral ARITMETICA parIzq ARRAY parDer					{$$ = new OperarArray1($1, $3, $5, this._$.first_line,this._$.first_column)}
@@ -374,14 +391,6 @@ OperarARRAY
 		
 ;
 
-ARITMETICA
-		:add																	{$$=operador.suma}
-		|minus																	{$$=operador.resta}
-		|asterisk																{$$=operador.multiplicacion}
-		|div 																	{$$=operador.div}
-		|mod																	{$$=operador.modulo}
-		|pot																	{$$=operador.potencai}
-;
 
 TRIGONOMETRICA
 		:sin																	{$$=trigo.sin}
@@ -394,10 +403,14 @@ ARRAY
 	|id 																		{$$ = new Literal($1, this._$.first_line,this._$.first_column, Valor.id)}
 ;		
 CONDICIONES
-		:CONDICIONES LOGICA CONDICION 											{$$ =[new logica($1,$2, $3, this._$.first_line,this._$.first_column)]}
-		|CONDICION																{$$=[$1]}
+		:CONDICIONES LOGICA COND  											{$$ =[new logica($1,$2, $3, this._$.first_line,this._$.first_column)]}
+		|COND																{$$=[$1]}
 ;
 
+COND 
+	:CONDICION															   {$$=$1}	
+	|parIzq CONDICION parDer												{$$=$2}	
+;
 
 CONDICION
 		:E equalEqual E 													{$$ = new relacional($1, operador.equalEqual, $3, this._$.first_line,this._$.first_column) }
@@ -407,6 +420,7 @@ CONDICION
 		|E mayorIgual E  													{$$ = new relacional($1, operador.mayorIgual, $3, this._$.first_line,this._$.first_column) }
 		|E menorIgual E  													{$$ = new relacional($1, operador.menorIgual, $3, this._$.first_line,this._$.first_column) }
 		|not E 					 											{$$ = new relacional($2, operador.not, null, this._$.first_line,this._$.first_column) }
+	
 ;
 LOGICA
 		:and																{$$=logica.and}
@@ -415,8 +429,10 @@ LOGICA
 ;
 
 PRINT
-		:print parIzq E parDer												{$$ = new Print($3,0, this._$.first_line,this._$.first_column) }
-		|println parIzq E parDer											{$$ = new Print($3,1, this._$.first_line,this._$.first_column) }
+		:print parIzq E parDer												{$$ = new Print($3,0,null,this._$.first_line,this._$.first_column) }
+		|print parIzq E comma E parDer										{$$ = new Print($3,0, $5, this._$.first_line,this._$.first_column) }
+		|println parIzq E parDer											{$$ = new Print($3,1,null, this._$.first_line,this._$.first_column) }
+		|println parIzq E comma E parDer									{$$ = new Print($3,1,$5, this._$.first_line,this._$.first_column) }
 
 ;
 

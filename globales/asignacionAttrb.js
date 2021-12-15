@@ -7,5 +7,14 @@ var asignacionAttrb = /** @class */ (function () {
         this.column = column;
         this.tipo = tipo;
     };
+    asignacionAttrb.prototype.ejecutar = function(entorno, ast){
+        if(entorno.existe(this.id)){
+            var sim = entorno.getSimbolo(this.id)
+            var st = ast.getStruct(this.id)
+            if(st.existeAttrb(this.id1)){
+
+            }
+        }
+    }
     return asignacionAttrb;
 }());

@@ -15,20 +15,13 @@ var Aritmetica = /** @class */ (function () {
     }
 
     Aritmetica.prototype.getValor = function(entorno, ast, expr){
-        var val =expr.getValorImplicito()
-        if(typeof val == "string"  ){
+        var val =expr.getValorImplicito(entorno,ast)
+        if(typeof val == "object"  ){
             
-            if(entorno.existeEnActual(val)){
+            if(entorno.existe(val)){
                 var simAux2 = entorno.getSimbolo(val)
                 return simAux2.getValorImplicito(entorno, ast)
-            }else{
-                if(entorno.existe(val)){
-                    var simAux2 = entorno.getSimbolo(val)
-                  return simAux2.getValorImplicito(entorno, ast)
-                }
-                
             }
-            
         }
         return val
     }
@@ -39,6 +32,10 @@ var Aritmetica = /** @class */ (function () {
         var valor2 = this.getValor(entorno, ast, this.expr2)
        
         if (typeof valor1 == 'number' && typeof valor2 == 'number'){
+            
+            if(isNaN(valor1) || isNaN(valor2)){
+            //    console.log(entorno)
+            }
             switch (this.operador) {
                 case operador.suma:
                     return this.valor = valor1 + valor2;
