@@ -34,12 +34,16 @@ const entornoGlobal = new Entorno(null);
 function parsear(){
 
     var contenido = `
-    int a
+    
     int ackermann(int m, int n)
     {
         
-        print("m",m)
-        print("n",n)
+        print("parametros recibo")
+        print("m", m)
+        print("n", n)
+        print("num", num)
+        num++
+
         if (m == 0) {
             print(1)
             return (n + 1)
@@ -48,41 +52,51 @@ function parsear(){
             return ackermann(m - 1, 1)
         } else {
             print(3)
-            print("cualquier cosa")
-            //a = ackermann(m, n - 1)
-            print (funss(2,2))
-            return ackermann(m - 1,ackermann(m, n - 1) )
+            return ackermann(m - 1, ackermann(m, n - 1))
         }
     }
 
     int funss (int m, int n){
-        //int s=0
         if (m == n){
             print("Aqui voy")
             m =m+n
-            return m
+            return 2
+        }else{
+            print("Aqui voy Else")
+            return funss(m,funss(5,5))
         }
         
        
     }
-    
-    int main()
+
+    int hanoi( int discos, int origen, int auxiliar, int destino)
     {
-        //print (funss(2,2))
-        
-        print("Ejecutando Ackermann\n")
-        
-        int d = ackermann(2, 3)
-        print("val", d)
-
-      /*  if (9 == d) {
-            print("---> Done.\n")
-        } else {
-           
-            print("---> RIP.\n")
-        }*/
-
+        if (discos == 1){
+            print(" if- mover de ", origen)
+           // print("a ", destino)
+           // print("Mover de " & origen & " a " & destino)
+        }else{
+            int ds = discos -1
+            hanoi(discos - 1, origen, destino, auxiliar)
+            print("else - mover de ", origen)
+            print("a ", destino)
+            //print("Mover de " & origen & " a " & destino)
+            hanoi(ds, auxiliar, origen, destino)
+        }
+        return 1
     }
+    int factorial(int num)
+    {
+        if (num == 1){
+            return 1
+        }else{
+            return num * factorial(num - 1)
+        }
+    }
+    void main() {
+        print(factorial(5))
+      //  hanoi(3,1,2,3)
+	}
     
     
     `;

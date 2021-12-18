@@ -15,7 +15,7 @@ var DeclaracionExpr = /** @class */ (function () {
         return this.id
     }
     DeclaracionExpr.prototype.ejecutar = function(entorno, ast){
-        if(!entorno.existe(this.id)){
+        if(!entorno.existeEnActual(this.id) && !entornoGlobal.existeEnActual(this.id)){
             var simb = new Simbolo(this.tipoDeclaracion, this.id, this.linea, this.column, this.expresion.getValorImplicito(entorno, ast))
             entorno.agregar(this.id,simb)
         }else{

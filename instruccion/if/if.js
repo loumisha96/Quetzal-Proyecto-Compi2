@@ -16,21 +16,27 @@ var if_ = /** @class */ (function () {
             var valor = cond.getValorImplicito(entorno,ast)
             if (typeof valor == 'boolean'){
                 if(valor){
-                    const nuevoEnt = new Entorno(entorno)
-                    this.instrucciones.forEach(instruccion => {
-                        if(instruccion.tipo != tipoInstr.ReturnE && instruccion.tipo != tipoInstr.Call)
-                            retorna =instruccion.ejecutar(nuevoEnt,ast)
-                        else{
-                            retorna = instruccion.ejecutar(nuevoEnt,ast)
-                          /*  if(fn.tipoFuncion==Primitivo.int && typeof retorna =="number"){
-                                retorna = re
-                            }else if(fn.tipo==Primitivo.String && typeof retorna =="string")
-                                retorna = re
-                            else if(fn.tipo==Primitivo.boolean && typeof retorna =="boolean")
-                                retorna = re*/
-                            
-                        }
-                    });
+                    
+                    try {
+                        this.instrucciones.forEach(instruccion => {
+                            if(instruccion.tipo != tipoInstr.ReturnE && instruccion.tipo != tipoInstr.Call)
+                                retorna =instruccion.ejecutar(entorno,ast)
+                            else{
+                                retorna = instruccion.ejecutar(entorno,ast)
+                                
+                              /*  if(fn.tipoFuncion==Primitivo.int && typeof retorna =="number"){
+                                    retorna = re
+                                }else if(fn.tipo==Primitivo.String && typeof retorna =="string")
+                                    retorna = re
+                                else if(fn.tipo==Primitivo.boolean && typeof retorna =="boolean")
+                                    retorna = re*/
+                                    throw BreakException;
+                            }
+                        });
+                    } catch (error) {
+                        
+                    }
+                    
                 }else{
                      const nuevoEnt = new Entorno(entorno)
                      this.elses.forEach(els => {
@@ -38,7 +44,7 @@ var if_ = /** @class */ (function () {
                     });
                 }
             }else{
-                Errores.push(new nodoError("Tipo Semántico", "conodición no booleana: " +valor, this.linea, this.column))
+                Errores.push(new nodoError("Tipo Semántico", "condición no booleana: " +valor, this.linea, this.column))
             }
         });
         return retorna

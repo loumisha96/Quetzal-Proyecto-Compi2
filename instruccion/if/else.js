@@ -11,7 +11,7 @@ var else_ = /** @class */ (function () {
         var retorna=-1
         try {
             this.instrucciones.forEach(instruccion => {
-                const nuevoEnt = new Entorno(entorno)
+                
                 
                     if(instruccion.tipo != tipoInstr.ReturnE && instruccion.tipo != tipoInstr.Call)
                              retorna=   instruccion.ejecutar(entorno,ast)

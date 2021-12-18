@@ -1,7 +1,33 @@
-int a, b, c
+ int funss (int m, int n){
+        int w = m
+        int y = n
+        if (w < y){
+            return funss(w+1, y)
+        } else {
+            return w
+        }
+        
+       
+    }
+    
+    int main()
+    {
+        int d = funss(1, 10)
+        print("val", d)
 
-int ancho
-int b
+        if (9 == d) {
+            print("---> Done.\n")
+        } else {
+           
+            print("---> RIP.\n")
+        }
+    }
+
+
+
+
+
+
 
 void llamar(int a, int b){
   

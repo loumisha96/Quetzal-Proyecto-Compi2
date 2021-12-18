@@ -8,26 +8,31 @@ var elseif_ = /** @class */ (function () {
         
     };
     elseif_.prototype.ejecutar = function(entorno, ast){
-        
+        var retorna =-1
         this.condiciones.forEach(cond => {
             var valor = cond.getValorImplicito(entorno, ast)
             if (typeof valor == 'boolean'){
                 if(valor){
-                    const nuevoEnt = new Entorno(entorno)
-                    this.instrucciones.forEach(instruccion => {
-                        if(instruccion.tipo != tipoInstr.ReturnE && instruccion.tipo != tipoInstr.Call)
-                            instruccion.ejecutar(entorno,ast)
-                        else{
-                            retorna = instruccion.ejecutar(entorno,ast)
-                           /* if(fn.tipoFuncion==Primitivo.int && typeof retorna =="number"){
-                                retorna = re
-                            }else if(fn.tipo==Primitivo.String && typeof retorna =="string")
-                                retorna = re
-                            else if(fn.tipo==Primitivo.boolean && typeof retorna =="boolean")
-                                retorna = re*/
-                            
-                        }
-                    });
+                    
+                    try {
+                        this.instrucciones.forEach(instruccion => {
+                            if(instruccion.tipo != tipoInstr.ReturnE && instruccion.tipo != tipoInstr.Call)
+                                instruccion.ejecutar(entorno,ast)
+                            else{
+                                retorna = instruccion.ejecutar(entorno,ast)
+                               /* if(fn.tipoFuncion==Primitivo.int && typeof retorna =="number"){
+                                    retorna = re
+                                }else if(fn.tipo==Primitivo.String && typeof retorna =="string")
+                                    retorna = re
+                                else if(fn.tipo==Primitivo.boolean && typeof retorna =="boolean")
+                                    retorna = re*/
+                                    throw BreakException;
+                            }
+                        });
+                    } catch (error) {
+                        
+                    }
+                    return retorna
                 }else{
                      const nuevoEnt = new Entorno(entorno)
                      this.elses.forEach(els => {

@@ -11,11 +11,12 @@ var parametro = /** @class */ (function () {
     };
     parametro.prototype.ejecutar = function(entorno, ast){
         
-        if(!entorno.existe(this.id)){
+        if(!entorno.existeEnActual(this.id) && !entornoGlobal.existeEnActual(this.id)){
             var simb = new Simbolo(this.tipo, this.id, this.linea, this.column, this.getValorDefault())
             entorno.agregar(this.id,simb)
         }else{
-           // Errores.push(new nodoError("Tipo Semántico", "Tipado no permitido", "", this.linea, this.column))
+            Errores.push(new nodoError("Tipo Semántico", "Variable ya creada: "+this.id, "", this.linea, this.column))
+            console.log("Tipo Semántico", "Variable ya creada: "+this.id, "")
         }
         
     }

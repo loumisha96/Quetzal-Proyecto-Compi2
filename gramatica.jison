@@ -451,7 +451,7 @@ LOGICA
 ;
 
 PRINT
-		:print parIzq E parDer												{$$ = new Print($3,0,null,this._$.first_line,this._$.first_column) }
+		:print parIzq EXPRESIONES parDer												{$$ = new Print($3,0,null,this._$.first_line,this._$.first_column) }
 		|print parIzq CALL parDer											{$$ = new Print($3,0,null,this._$.first_line,this._$.first_column) }
 		|print parIzq E comma E parDer										{$$ = new Print($3,0, $5, this._$.first_line,this._$.first_column) }
 		|println parIzq E parDer											{$$ = new Print($3,1,null, this._$.first_line,this._$.first_column) }

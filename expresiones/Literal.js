@@ -11,16 +11,16 @@ var Literal = /** @class */ (function () {
     Literal.prototype.getValorImplicito=function(entorno,ast){
         if(this.tipo == Valor.id){
             const sim = entorno.getSimbolo(this.valor)
-            const lit = sim.getValor()
-            if(typeof lit =="object")
-                return lit.getValorImplicito(entorno,ast)
+           // const lit = sim.getValor()
+            if(typeof sim =="object")
+                return sim.getValorImplicito(entorno,ast)
             else
-                return lit
+                return sim
         }else if(this.tipo == Valor.negativo){
             if(typeof this.valor =="object")
                 return this.valor.getValorImplicito(entorno,ast)*-1
             else
-                return lit*-1
+                return sim*-1
         }
         
         return this.valor
