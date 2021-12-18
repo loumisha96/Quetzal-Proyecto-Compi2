@@ -80,9 +80,10 @@
 
 /*Espacios en blanco*/
 [ \r\t]+     {}       
-\n           {}    
+\n           {}   
+[0-9]+("."[0-9]+)?  return  'decimal'; 
 [0-9]+                      return  'digits';
-[0-9]+("."[0-9]+)?  return  'decimal';
+
 (\"({EscapeQuot}|[^"])*\")|("'""({EscapeApos}|[^'])*""'") return 'cadena';
 [A-Za-z_][A-Za-z_0-9]*	    return 'id';
 
@@ -114,45 +115,60 @@
 
 
 
+
 <
 %start ini 
 %% /*definicion de gramática*/
-ini
-        :MAIN EOF																{$$= new Array(); $$.push($1); return $$}
-		|MAIN GLOBALES EOF														{$$ = new Array(); $$.push($1); $$.push($2); return $$}
-		|GLOBALES MAIN EOF					  								    {$$ = new Array(); $$.push($1); $$.push($2); return $$}
-		|GLOBALES MAIN GLOBALES EOF												{$$ = new Array(); $$.push($1); $$.push($2); $$.push($3); return $$}
-		
+ini	
+	:S EOF {return $1}
 ;
+
+S
+        :MAIN 																{$$= [$1]; }
+		|MAIN GLOBALES 														{$$ = [$1,$2] }
+		|GLOBALES MAIN 					  								  	{$$ = [$1,$2] }
+		|GLOBALES MAIN GLOBALES 											{$$ = [$1,$2,$3] }
+		//|PANICO																{$$=[$1]}
+;
+
 
 GLOBALES
 		:GLOBALES GLOBAL 														{$1.push($2); $$=$1}
 		|GLOBAL																	 {$$=[$1]}
 		
 ;
+PANICO	
+		:error                                                				{Errores.push(new nodoError("Error Sintáctico", "No se esperaba "+$1, "",this._$.first_line,this._$.first_column, ) );}
+;
 GLOBAL	
-		:FUNCION																{$$ = $1}
-		|DECLARACION 															{$$ = $1}
-		|ASIGNACION																{$$ = $1}
-		|STRUCT																	{$$ = $1}
+		:FUNCION																{$$ = $1;}
+		|DECLARACION  															{$$ = $1; }
+		|ASIGNACION																{$$ = $1; }
+		|STRUCT																	{$$ = $1; }
+		//|PANICO
 		
 ;
 
 DECLARACION
 		:TIPO corcheteIzq corcheteDer id equal corcheteIzq VARIABLES corcheteDer{ $$ = new DeclaracionArray($1, $4, $7, this._$.first_line,this._$.first_column, tipoInstr.DeclaracionArray)}
 		|id id equal id parIzq VARIABLES parDer									{ $$ = new DeclaracionStruct($1, $2, $4, $6, this._$.first_line,this._$.first_column, tipoInstr.Struct)}
-		|TIPO id equal CALL														{ $$ = new DeclaracionCall($1, $2, $4, this._$.first_line,this._$.first_column, tipoInstr.DeclaracionCall)}
-		|TIPO id equal E 														{ $$ = new DeclaracionExpr($1, $2, $4, this._$.first_line,this._$.first_column, tipoInstr.DeclaracionExpr)}
+		|TIPO DEC CALL															{$$= new DeclaracionCall($1, $2, $3,this._$.first_line,this._$.first_column, tipoInstr.DeclaracionCall )}
+		|TIPO DEC E 															{ $$ = new DeclaracionExpr($1, $2, $3, this._$.first_line,this._$.first_column, tipoInstr.DeclaracionExpr)}
 		|TIPO IDS 																{ $$ = new DeclaracionVarios($1, $2, this._$.first_line,this._$.first_column, tipoInstr.DeclaracionVarios )}
 		|id id 																	{ $$ = new DeclaracionStruct2($1, $2, this._$.first_line,this._$.first_column, tipoInstr.DeclaracionStruct2)}
+		//|PANICO
 ;
 
+DEC
+	:id equal																{$$=$1}
+;
 TIPO
 		:int																	{$$ = Primitivo.int}
 		|double																	{$$ = Primitivo.double}
 		|boolean																{$$ = Primitivo.boolean}
 		|char																	{$$ = Primitivo.char}
 		|String																	{$$ = Primitivo.String}
+		|void																	{$$= tipoF.void}
 ;
 
 
@@ -160,14 +176,14 @@ ASIGNACION
 		:id equal E 															{$$ = new AsignacionExpr($1, $3,this._$.first_line,this._$.first_column, tipoInstr.AsignacionExpr)}
 		|id point id equal E 													{$$ = new asignacionAttrb($1, $3, $5, this._$.first_line,this._$.first_column, tipoInstr.AsignacionAttrb) }
 		|id equal numeral id    												{$$ = new AsignacionCopiaArr($1, $4, this._$.first_line,this._$.first_column, tipoInstr.AsignacionCopiaArr)}
+	//	|PANICO
 ;
 
 EXPRESIONES
 		: EXPRESIONES comma E 													{$1.push($3); $$=$1}
 		|E 																		 {$$=[$1]}
+		//|PANICO
 ;
-
-
 
 VARIABLES 
 		:VARIABLES comma E														{$1.push($3); $$=$1}
@@ -177,7 +193,7 @@ VARIABLES
 VALOR 
 		:cadena																	{$$ = new Literal($1, this._$.first_line,this._$.first_column, Valor.cadena)}
 		|digits																	{$$ = new Literal(parseInt($1), this._$.first_line,this._$.first_column, Valor.digito)}
-		|decimal																{$$ = new Literal($1, this._$.first_line,this._$.first_column, Valor.decimal)}
+		|decimal																{$$ = new Literal(parseInt($1), this._$.first_line,this._$.first_column, Valor.decimal)}
 		|null																	{$$ = new Literal($1, this._$.first_line,this._$.first_column, Valor.null)}
 ;
 
@@ -186,17 +202,18 @@ IDS
 		|id 																	 {$$=[$1]}
 ;
 
-FUNCIONES
-		:FUNCIONES FUNCION														{$1.push($2); $$=$1}
-		|FUNCION																 {$$=[$1]}
+FUNCION 
+		:TIPO FUNC PARAMETROS parDer llaIzq INSTRUCCIONES llaDer  		{$$= new Funcion($1, $2, $3,$6, this._$.first_line,this._$.first_column, tipoInstr.Funcion)}
+		|TIPO FUNC parDer llaIzq INSTRUCCIONES llaDer             		{$$= new Funcion($1, $2, [],$5, this._$.first_line,this._$.first_column, tipoInstr.Funcion)}
+		|TIPO FUNC PARAMETROS parDer llaIzq llaDer             			{$$= new Funcion($1, $2, $3,[], this._$.first_line,this._$.first_column, tipoInstr.Funcion)}
+		|TIPO FUNC parDer llaIzq llaDer							    	{$$= new Funcion($1, $2, [],[], this._$.first_line,this._$.first_column, tipoInstr.Funcion)}
+
+;
+FUNC
+	:id parIzq															{$$=$1}
 ;
 
-FUNCION 
-		:TIPO2 id parIzq PARAMETROS parDer llaIzq INSTRUCCIONES llaDer  		{$$ = new Funcion($1, $2, $4, $7, this._$.first_line,this._$.first_column, tipoInstr.Funcion)}
-		|TIPO2 id parIzq parDer llaIzq INSTRUCCIONES llaDer             		{$$ = new Funcion($1, $2, [], $7, this._$.first_line,this._$.first_column, tipoInstr.Funcion)}
-		|TIPO2 id parIzq PARAMETROS parDer llaIzq llaDer             			{$$ = new Funcion($1, $2, $4, [], this._$.first_line,this._$.first_column, tipoInstr.Funcion)}
-		|TIPO2 id parIzq parDer llaIzq llaDer									{$$ = new Funcion($1, $2, [], [], this._$.first_line,this._$.first_column, tipoInstr.Funcion)}
-;
+
 
 PARAMETROS
 		:PARAMETROS comma PARAMETRO    											{$1.push($3); $$=$1}
@@ -209,13 +226,9 @@ PARAMETRO
 
 STRUCT		
 		:struct id llaIzq ATRIBUTOS llaDer 										{$$ = new struct($2, $4, this._$.first_line,this._$.first_column,tipoInstr.Struct )}		
+		//|PANICO
 ;
 
-TIPO2
-	:id																			{$$=$1}
-	|TIPO																		{$$=$1}
-	|void 																		{$$=tipoF.void}
-;
 
 ATRIBUTOS
 		:ATRIBUTOS comma ATRIBUTO 	 											{$1.push($3); $$=$1}
@@ -229,40 +242,43 @@ ATRIBUTO
 ;
 
 MAIN
-		:TIPO2 main parIzq parDer llaIzq INSTRUCCIONES llaDer 					{$$ = new main($1, $6, this._$.first_line,this._$.first_column, tipoInstr.Main)}
-		|TIPO2 main parIzq parDer llaIzq llaDer							 		{$$ = new main($1, [], this._$.first_line,this._$.first_column, tipoInstr.Main)}
-		
+		:TIPO main parIzq parDer llaIzq INSTRUCCIONES llaDer 					{$$ = new main($1, $6, this._$.first_line,this._$.first_column, tipoInstr.Main)}
+		|TIPO main parIzq parDer llaIzq llaDer							 		{$$ = new main($1, [], this._$.first_line,this._$.first_column, tipoInstr.Main)}
+		//|PANICO
 ;
 
 INSTRUCCIONES
 		:INSTRUCCIONES INSTRUCCION												{$1.push($2); $$=$1}
 		|INSTRUCCION															 {$$=[$1]}
+		//|PANICO
 ;
 
 INSTRUCCION
 		:GLOBAL       															{$$=$1}
-		|CALL																	{$$=$1}
+		|CALL 																	{$$=$1}
 		|IF 																	{$$=$1}
 		|FOR 																	{$$=$1}
-		|PRINT																	{$$=$1}
+		|PRINT 																	{$$=$1}
 		|WHILE 																	{$$=$1}
 		|SWITCH 																{$$=$1}
 		|DOWHILE																{$$=$1}
 		|FOREACH																{$$=$1}
 		|TERNARIO 																{$$=$1}
-		|break																	{$$= new Break(this._$.first_line,this._$.first_column, tipoInstr.Break)}
-		|return	E																{$$= new Return($2, this._$.first_line,this._$.first_column, tipoInstr.ReturnE)}
-		|return		  															{$$= new Return(0, this._$.first_line,this._$.first_column, tipoInstr.Return)}
+		|break																{$$= new Break(this._$.first_line,this._$.first_column, tipoInstr.Break)}
+		|return	E 														{$$= new Return($2, this._$.first_line,this._$.first_column, tipoInstr.ReturnE)}
+		|return	CALL 														{$$= new Return($2, this._$.first_line,this._$.first_column, tipoInstr.Call)}
+		|return		  														{$$= new Return(null, this._$.first_line,this._$.first_column, tipoInstr.Return)}
 		|E																		{$$ = $1}
 ;
 
 CALL
 	:id parIzq parDer 															{$$= new call($1,[], this._$.first_line,this._$.first_column, tipoInstr.Call)}
 	|id parIzq VARIABLES parDer 												{$$= new call($1,$3, this._$.first_line,this._$.first_column, tipoInstr.Call)}
+	//|PANICO
 ;
 
 TERNARIO
-	: parIzq CONDICIONES parDer interrogacion INSTRUCCION colon INSTRUCCION  						{$$= new Ternario($2, $5, $7,this._$.first_line,this._$.first_column, tipoInstr.Ternario)}
+	: parIzq CONDICIONES parDer interrogacion INSTRUCCION colon INSTRUCCION  	{$$= new Ternario($2, $5, $7,this._$.first_line,this._$.first_column, tipoInstr.Ternario)}
 ;
 
 IF 
@@ -271,6 +287,7 @@ IF
 		|if parIzq CONDICIONES parDer llaIzq  llaDer ELSES						 {$$ = new if_($3, [], $7, this._$.first_line,this._$.first_column, tipoInstr.If )}
 		|if parIzq CONDICIONES parDer llaIzq llaDer 							 {$$ = new if_($3, [], [], this._$.first_line,this._$.first_column, tipoInstr.If )}
         |if parIzq CONDICIONES parDer INSTRUCCION ELSES  						 {$$ = new if_($3, [$5], $6, this._$.first_line,this._$.first_column, tipoInstr.If )}
+	//	|PANICO
 ;
 
 ELSES
@@ -308,9 +325,10 @@ WHILE
 ;
 
 DOWHILE
-		:do llaIzq INSTRUCCIONES llaDer while parIzq CONDICIONES parDer	{$$ = new dowhile($3,$7,this._$.first_line,this._$.first_column, tipoInstr.DoWhile )}
-		|do llaIzq llaDer while parIzq CONDICIONES parDer 				{$$ = new dowhile([],$7,this._$.first_line,this._$.first_column, tipoInstr.DoWhile )}
+		:do llaIzq INSTRUCCIONES llaDer while parIzq CONDICIONES parDer			{$$ = new dowhile($3,$7,this._$.first_line,this._$.first_column, tipoInstr.DoWhile )}
+		|do llaIzq llaDer while parIzq CONDICIONES parDer 						{$$ = new dowhile([],$7,this._$.first_line,this._$.first_column, tipoInstr.DoWhile )}
 		
+		//|PANICO
 ;
 
 FOR 
@@ -321,6 +339,7 @@ FOR
 FORVAR
 	:id equal E																	{$$ = new AsignacionExpr($1, $3,this._$.first_line,this._$.first_column, tipoInstr.AsignacionExpr)}
 	|TIPO id equal E    														{ $$ = new DeclaracionExpr($1, $2, $4, this._$.first_line,this._$.first_column, tipoInstr.DeclaracionExpr)}
+	//|PANICO
 ;
 
 FORVAR1
@@ -346,7 +365,7 @@ FOREACH1
 		|id																		{$$ = new Literal($1, this._$.first_line,this._$.first_column, Valor.id)}
 		|corcheteIzq VARIABLES corcheteDer										{$$=$2}
 		|id corcheteIzq digits colon digits corcheteDer  						{$$ = new foreach1($1,$3, $5,this._$.first_line,this._$.first_column); }
-		|id corcheteIzq begin colon end corcheteDer  						{$$ = new foreach1($1,$3, $5,this._$.first_line,this._$.first_column); }
+		|id corcheteIzq begin colon end corcheteDer  							{$$ = new foreach1($1,$3, $5,this._$.first_line,this._$.first_column); }
 ;
 
 E
@@ -371,6 +390,8 @@ E
 		|E concat E 															{$$ = new concatenacion($1, $3, this._$.first_line,this._$.first_column); }
 		|minus E            %prec menosU                                        {$$ = new Literal($2, this._$.first_line,this._$.first_column, Valor.negativo); }
 		|E                                                                      {$$=$1}
+		//|PANICO
+		|CALL        															 {$$=$1}
 ;
 
 NATIVA
@@ -381,6 +402,7 @@ NATIVA
 	|E point toLowercase parIzq parDer					 						{$$= new nativa($1,null, null, this._$.first_line,this._$.first_column, Nativa.toLowercase)}
 	|E point pop parIzq  parDer						 							{$$= new nativa($1, null, $7, this._$.first_line,this._$.first_column, Nativa.pop)}
 	|E point push parIzq E parDer						  						{$$= new nativa($1, $5, $7, this._$.first_line,this._$.first_column, Nativa.push)}
+	//|PANICO
 ;
 
 
@@ -403,12 +425,12 @@ ARRAY
 	|id 																		{$$ = new Literal($1, this._$.first_line,this._$.first_column, Valor.id)}
 ;		
 CONDICIONES
-		:CONDICIONES LOGICA COND  											{$$ =[new logica($1,$2, $3, this._$.first_line,this._$.first_column)]}
-		|COND																{$$=[$1]}
+		:CONDICIONES LOGICA COND  												{$$ =[new logica($1,$2, $3, this._$.first_line,this._$.first_column)]}
+		|COND																	{$$=[$1]}
 ;
 
 COND 
-	:CONDICION															   {$$=$1}	
+	:CONDICION															  	{$$=$1}	
 	|parIzq CONDICION parDer												{$$=$2}	
 ;
 
@@ -420,7 +442,7 @@ CONDICION
 		|E mayorIgual E  													{$$ = new relacional($1, operador.mayorIgual, $3, this._$.first_line,this._$.first_column) }
 		|E menorIgual E  													{$$ = new relacional($1, operador.menorIgual, $3, this._$.first_line,this._$.first_column) }
 		|not E 					 											{$$ = new relacional($2, operador.not, null, this._$.first_line,this._$.first_column) }
-	
+		//|PANICO
 ;
 LOGICA
 		:and																{$$=logica.and}
@@ -430,9 +452,10 @@ LOGICA
 
 PRINT
 		:print parIzq E parDer												{$$ = new Print($3,0,null,this._$.first_line,this._$.first_column) }
+		|print parIzq CALL parDer											{$$ = new Print($3,0,null,this._$.first_line,this._$.first_column) }
 		|print parIzq E comma E parDer										{$$ = new Print($3,0, $5, this._$.first_line,this._$.first_column) }
 		|println parIzq E parDer											{$$ = new Print($3,1,null, this._$.first_line,this._$.first_column) }
 		|println parIzq E comma E parDer									{$$ = new Print($3,1,$5, this._$.first_line,this._$.first_column) }
-
+		//|PANICO
 ;
 

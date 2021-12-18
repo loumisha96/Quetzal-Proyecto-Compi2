@@ -39,6 +39,7 @@ var tipoInstr;
     tipoInstr[tipoInstr["Ternario"] = 25] = "Ternario";
     tipoInstr[tipoInstr["Elseif"] = 26] = "Elseif";
     tipoInstr[tipoInstr["Else"] = 27] = "Else";
+   // tipoInstr[tipoInstr["ReturnE"] = 8] = "ReturnE";
 })(tipoInstr || (tipoInstr = {}));
 
 var Valor;

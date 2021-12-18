@@ -23,7 +23,40 @@ ul.tabs{
 	list-style: none;
 	display: flex;
 }
+ul.tabs2{
+	width: 100%;
+	background: #363636;
+	list-style: none;
+	display: flex;
+}
 
+ul.tabs2 li{
+	width: 50%;
+}
+
+ul.tabs2 li a{
+	color: #fff;
+	text-decoration: none;
+	font-size: 16px;
+	text-align: center;
+
+	display: block;
+	padding: 20px 0px;
+}
+ul.tabs2 li  select{
+	font-size: 16px;
+	width: 100%;
+	background: #363636;
+	list-style: none;
+	display: flex;
+	padding: 20px 0px;
+	text-align: center;
+	display: block;
+	text-decoration: none;
+	color: #fff;
+	border: 0ch;
+
+}
 ul.tabs li{
 	width: 50%;
 }
@@ -43,6 +76,9 @@ ul.tabs li a{
 }
 
 ul.tabs li a .tab-text{
+	margin-left: 8px;
+}
+ul.tabs2 li a .tab-text{
 	margin-left: 8px;
 }
 
@@ -76,8 +112,13 @@ ul.tabs li a .tab-text{
 	ul.tabs li a{
 		padding: 15px 0px;
 	}
-
+	ul.tabs2 li a{
+		padding: 15px 0px;
+	}
 	ul.tabs li a .tab-text{
+		display: none;
+	}
+	ul.tabs2 li a .tab-text{
 		display: none;
 	}
 

@@ -1,5 +1,6 @@
 var Atributo = /** @class */ (function () {
     function Atributo(tipoAttrb, id, array, linea, column, tipo, entorno) {
+        
         this.tipoAttrb = tipoAttrb;
         this.id = id;
         this.array = array;

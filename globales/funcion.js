@@ -1,5 +1,6 @@
 var Funcion = /** @class */ (function () {
     function Funcion(tipoFuncion, id, parametros, instrucciones,linea, column, tipo) {
+        
         this.tipoFuncion = tipoFuncion;
         this.id = id;
         this.parametros = parametros;

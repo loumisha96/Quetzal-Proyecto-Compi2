@@ -1,5 +1,6 @@
 var DeclaracionArray = /** @class */ (function () {
     function DeclaracionArray(tipoArray, id, valores, linea, column, tipo) {
+        
         this.tipoArray = tipoArray;
         this.id = id;
         this.valores = valores;
@@ -13,6 +14,7 @@ var DeclaracionArray = /** @class */ (function () {
             var simb = new Simbolo(this.tipoArray, this.id, this.linea, this.column, this.valores)
             entorno.agregar(this.id,simb)
         }else{
+            Errores.push(new nodoError("Tipo Semántico", "En declaracion id: " +this.id, this.linea, this.column))
             console.log("Error semántico en Declaracion id: "+ variable+" linea: " + this.linea +" column: " +this.column)
         }
     }

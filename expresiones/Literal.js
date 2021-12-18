@@ -1,5 +1,6 @@
 var Literal = /** @class */ (function () {
     function Literal(valor, linea, column, tipo) {
+        
         this.valor = valor;
         this.linea = linea;
         this.column = column;

@@ -1,5 +1,6 @@
 var forvar2 = /** @class */ (function () {
     function forvar2(id, signo, linea, column) {
+        
         this.id = id;
         this.signo = signo;
         this.linea = linea;

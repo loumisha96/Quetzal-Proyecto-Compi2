@@ -1,5 +1,6 @@
 var unario = /** @class */ (function () {
     function unario(id, operador, linea, column, tipo) {
+        
         this.id = id;
         this.operador = operador;
         this.linea = linea;
@@ -20,11 +21,14 @@ var unario = /** @class */ (function () {
                     sim.setValor(valor)
                 }
             }else{
-
+                Errores.push(new nodoError("Tipo Semántico", "Tipo no válido",  "", this.linea, this.column))
             }
                 
-        }else
-             console.log("Error semántico en Declaracion id: "+ this.id+" linea: " + this.linea +" column: " +this.column)
+        }else{
+            Errores.push(new nodoError("Tipo Semántico", "En declaracion id: " +this.id, this.linea, this.column))
+            console.log("Error semántico en Declaracion id: "+ this.id+" linea: " + this.linea +" column: " +this.column)
+        }
+             
     }
     return unario;
 }());

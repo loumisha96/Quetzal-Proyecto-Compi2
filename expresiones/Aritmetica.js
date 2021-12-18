@@ -8,6 +8,7 @@ var Aritmetica = /** @class */ (function () {
         this.column = column;
         this.tipo = tipo;
         this.valor = null;
+       
         
     };
     Aritmetica.prototype.getTipo = function(){
@@ -15,7 +16,13 @@ var Aritmetica = /** @class */ (function () {
     }
 
     Aritmetica.prototype.getValor = function(entorno, ast, expr){
-        var val =expr.getValorImplicito(entorno,ast)
+        var val =-1
+        if(expr.tipo == tipoInstr.Call){
+            val = expr.ejecutar(entorno,ast)
+        }else{
+            val = expr.getValorImplicito(entorno, ast)
+        }
+
         if(typeof val == "object"  ){
             
             if(entorno.existe(val)){
@@ -52,11 +59,11 @@ var Aritmetica = /** @class */ (function () {
                 case operador.potencia:
                     return this.valor = Math.pow(valor1, valor2)
 
-                default:
-                    break;
             }
    
             
+        }else{
+            Errores.push(new nodoError("Error Semántico","Tipos no permitidos", "",this.linea, this.column))
         }
 
     }

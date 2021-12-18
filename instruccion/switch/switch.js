@@ -1,5 +1,6 @@
 var switch_ = /** @class */ (function () {
     function switch_(id, cases, linea, column, tipo) {
+        
         this.id = id;
         this.cases = cases;
         this.linea = linea;
@@ -33,6 +34,8 @@ var switch_ = /** @class */ (function () {
                 
                 
             });
+        }else{
+            Errores.push(new nodoError("Tipo Semántico", "En declaracion id: " +this.id, this.linea, this.column))
         }
      }   
     return switch_;

@@ -1,5 +1,6 @@
 var struct = /** @class */ (function () {
     function struct(id, attrbs, linea, column, tipo) {
+        
         this.id = id;
         this.attrbs = attrbs;
         this.linea = linea;

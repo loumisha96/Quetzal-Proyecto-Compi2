@@ -1,5 +1,6 @@
 var OperarArray2 = /** @class */ (function () {
     function OperarArray2(id, operador, array, expr, linea, column) {
+        
         this.id = id;
         this.operador = operador;
         this.array = array;

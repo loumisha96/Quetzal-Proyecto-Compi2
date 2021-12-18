@@ -1,5 +1,6 @@
 var forvar = /** @class */ (function () {
     function forvar(tipoForVar, id,expr, linea, column, tipo, entorno) {
+        
         this.tipoForVar= tipoForVar;
         this.id = id;
         this.expr = expr;

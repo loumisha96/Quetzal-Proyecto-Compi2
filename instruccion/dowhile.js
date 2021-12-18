@@ -1,5 +1,6 @@
 var dowhile = /** @class */ (function () {
     function dowhile(instrucciones, condiciones, linea, column, tipo) {
+        
         this.instrucciones = instrucciones;
         this.condiciones = condiciones;
         this.linea = linea;
@@ -24,6 +25,8 @@ var dowhile = /** @class */ (function () {
               }else{
                    return
               }
+          }else{
+            Errores.push(new nodoError("Tipo Semántico", "En tipo de condición : " +valor, this.linea, this.column))
           }
       });
   }

@@ -1,5 +1,6 @@
 var relacional = /** @class */ (function () {
     function relacional(expr1, operador, expr2, linea, column ) {
+        
         this.expr1 = expr1;
         this.operador = operador;
         this.expr2 = expr2;
@@ -9,18 +10,19 @@ var relacional = /** @class */ (function () {
       //  this.entorno = entorno;
     };
     relacional.prototype.getValor = function(entorno, ast, expr){
-        var val =expr.getValorImplicito(entorno,ast)
+        var val =-1
+        if(expr.tipo == tipoInstr.Call){
+            val = expr.ejecutar(entorno,ast)
+        }else{
+            val = expr.getValorImplicito(entorno, ast)
+        }
         if(typeof val == "object" ){
             
-            if(entorno.existeEnActual(val)){
+            if(entorno.existe(val)){
                 var simAux2 = entorno.getSimbolo(val)
                 return simAux2.getValorImplicito(entorno, ast)
             }else{
-                if(entorno.existe(val)){
-                    var simAux2 = entorno.getSimbolo(val)
-                  return simAux2.getValorImplicito(entorno, ast)
-                }
-                
+                Errores.push(new nodoError("Tipo Semántico", "Variable no creada: "+val, "", this.linea, this.column))
             }
             
         }
@@ -60,6 +62,8 @@ var relacional = /** @class */ (function () {
                 default:
                     return null;
             }
+        }else{
+            Errores.push(new nodoError("Tipo Semántico", "Tipado no válido", "", this.linea, this.column))
         }
     }
         return relacional;

@@ -1,5 +1,6 @@
 var foreach_ = /** @class */ (function () {
     function foreach_(id, arr, instrucciones, linea, column, tipo) {
+        
         this.id = id;
         this.arr = arr;
         this.instrucciones = instrucciones;
@@ -44,16 +45,16 @@ var foreach_ = /** @class */ (function () {
                 this.arr.forEach(e => {
                     
                     var val = e.getValorImplicito(entorno,ast)
-                  /*  if( val.length>0){
-                        for(var i=0; i<val.length; i++){
+                  // if( val.length>0){
+                       /* for(var i=0; i<val.length; i++){
                             simb.setValor(val[i].getValorImplicito[entorno,ast])
                             this.instrucciones.forEach(instr => {
                                 instr.ejecutar(entorno, ast)
                             });
-                        }
+                        }*/
                         
                         
-                   }else{*/
+                  // }else{
                         simb.setValor(val)
                         this.instrucciones.forEach(instr => {
                             instr.ejecutar(entorno, ast)
@@ -117,6 +118,8 @@ var foreach_ = /** @class */ (function () {
                             }
     
                         }
+                    }else{
+                        Errores.push(new nodoError("Tipo Semántico", "En declaracion id: " +datos[0], this.linea, this.column))
                     }
                 }
                 

@@ -1,5 +1,6 @@
 var Trigonometrica = /** @class */ (function () {
     function Trigonometrica(tipoTr, expr, linea, column) {
+      
         this.tipoTr = tipoTr;
         this.expr = expr;
         this.linea =  linea;
@@ -9,7 +10,12 @@ var Trigonometrica = /** @class */ (function () {
     };
     Trigonometrica.prototype.getValorImplicito=function(entorno,ast){
       
-        var val = this.expr.getValorImplicito(entorno,ast)
+        var val =-1
+        if(this.expr.tipo == tipoInstr.Call){
+          val = this.expr.ejecutar(entorno,ast)
+        }else{
+            val = this.expr.getValorImplicito(entorno, ast)
+        }
         if(typeof val=='number'){
             switch (this.tipoTr) {
               case trigo.sin :
@@ -19,6 +25,8 @@ var Trigonometrica = /** @class */ (function () {
               case trigo.tan:
                 return Math.tan(val)
             }
+        }else{
+          Errores.push(new nodoError("Tipo Semántico", "Tipado no permitido", "", this.linea, this.column))
         }
       }
     return Trigonometrica;

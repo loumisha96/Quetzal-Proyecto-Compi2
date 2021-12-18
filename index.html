@@ -9,10 +9,13 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.52.2/codemirror.min.css"></link>
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.52.2/codemirror.min.js"></script>
 	<script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
-	<script src="index.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/vis/4.20.1/vis.js"></script>
+    
+    
 
 
     <!-- Exportar clases -->
+    
     <script src="expresiones/Aritmetica.js"></script>
     <script src="expresiones/Trigonometrica.js"></script>
     <script src="expresiones/arreglo.js"></script>
@@ -31,6 +34,7 @@
     <script src="globales/attributosStructStruct.js"></script>
     <script src="globales/call.js"></script>
     <script src="globales/DeclaracionExpr.js"></script>
+    <script src="globales/DeclaracionCall.js"></script>
     <script src="globales/declaracionArray.js"></script>
     <script src="globales/DeclaracionStruct2.js"></script>
     <script src="globales/DeclaracionStruct.js"></script>
@@ -51,6 +55,8 @@
     <script src="instruccion/if/else.js"></script>
     <script src="instruccion/if/elseif.js"></script>
     <script src="instruccion/switch/case.js"></script>
+    <script src="instruccion/Return.js"></script>
+    <script src="instruccion/Break.js"></script>
     <script src="instruccion/switch/switch.js"></script>
     <script src="otros/atributo.js"></script>
     <script src="otros/parametro.js"></script>
@@ -59,40 +65,56 @@
     <script src="globales/DeclaracionVarios.js"></script>
     <script src="tablaSimbolos/entorno.js"></script>
     <script src="tablaSimbolos/simbolo.js"></script>
+    <script src="reportes/reporteTablaSimbolos.js"></script>
     <script src="ast/Ast.js"></script>
-    
-    
-    
+    <script src="reportes/graficarAst.js"></script>
+    <script src="ast/nodo.js"></script>
+    <script src="ast/nodoError.js"></script>
+	<script src="index.js"></script>
     <script src="gramatica.js"></script>
+    <script src="gramatica2.js"></script>
+    <script src="gramatica3.js"></script>
+    
+    
+  
 </head>
 <body>
 	<div class="wrap">
 		<ul class="tabs">
-			<li><a href="#tab1"><span class="fa fa-home"></span><span class="tab-text">Inicio</span></a></li>
-			<li><a href="#tab2"><span class="fa fa-group"></span><span class="tab-text">Nosotros</span></a></li>
-			<li><a href="#tab3"><span class="fa fa-briefcase"></span><span class="tab-text">Servicios</span></a></li>
-			<li><a href="#tab4"><span class="fa fa-bookmark"></span><span class="tab-text">Blog</span></a></li>
+			<li><a href="#tab1"><span class="fa fa-home"></span><span onclick="parsear()" class="tab-text">EJECUTAR QUETZAL</span></a></li>
+			<li><a href="#tab2"><span class="fa fa-group"></span><span class="tab-text">EJECUTAR 3D</span></a></li>
 		</ul>
-        <input type="button" value="AST" onclick="parsear()">
-        <ul class="tabs">
+        
+        <ul class="tabs2">
             
-            <li><a onclick="parsear()">AST</a></li>
-            <li><a href="">CST</a></li>
-            <li><a href="">REPORTES</a></li>
+            <li><a onclick="grafAst()">AST</a></li>
+            <li><a >
+                <select  id="reportes"onclick="Reportes()">
+                    <li>
+                        <option value="TS"><li>TABLA DE SIMBOLOS</li></option>
+                        <option value="TE">TABLA DE ERRORES</option>
+                        <option value="AST">AST</option>
+                    </li>
+                    
+                </select>
+            </a>
+                
+            </li>
         </ul>
 		<div class="secciones">
 			<article id="tab1"  >
-				<h1>Inicio</h1>
-                    
-                    <div class="consolas" style="float: left; width: 50%" id="editor1"></div>
+				<div style="float: left; width: 50%" id="editor1">
+                    <h1>ENTRADA</h1>
                     <script>
                         setearEditores("#editor1")
                     </script>
-                    <div id="editor2" style="float: right; width: 50%">
-                        <script>
-                            setearEditores("#editor2")
-                        </script>
-                    </div>
+                </div>
+                <h1>SALIDA</h1>
+                <div id="editor2" style="float: right; width: 50%">
+                    <script>
+                        setearEditores("#editor2")
+                    </script>
+                </div>
             </article>
 			<article id="tab2">
 				<div class="consolas" style="float: left; width: 50%" id="editor3"></div>
@@ -105,31 +127,11 @@
                         </script>
                     </div>
 			</article>
-			<article id="tab3">
-				<h1>Servicios</h1>
-                <div class="consolas" style="float: left; width: 50%" id="editor5"></div>
-                    <script>
-                        setearEditores("#editor5")
-                    </script>
-                    <div id="editor6" style="float: right; width: 50%">
-                        <script>
-                            setearEditores("#editor6")
-                        </script>
-                    </div>
-			</article>
-			<article id="tab4">
-				<h1>Blog</h1>
-				<div class="consolas" style="float: left; width: 50%" id="editor7"></div>
-                    <script>
-                        setearEditores("#editor7")
-                    </script>
-                    <div id="editor8" style="float: right; width: 50%">
-                        <script>
-                            setearEditores("#editor8")
-                        </script>
-                    </div>
-			</article>
 		</div>
+        
 	</div>
+    <div  id="grafo">
+
+    </div>
 </body>
 </html>

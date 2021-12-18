@@ -1,5 +1,6 @@
 var DeclaracionStruct = /** @class */ (function () {
     function DeclaracionStruct(tipoStruct, id, struct, valores, linea, column, tipo) {
+        
         this.tipoStruct = tipoStruct;
         this.id = id;
         this.struct = struct;
@@ -15,10 +16,12 @@ var DeclaracionStruct = /** @class */ (function () {
                 var simb = new Simbolo(this.tipoStruct, this.id, this.linea, this.column,this.valores)
                 entorno.agregar(this.id,simb)
             }else{
+                Errores.push(new nodoError("Tipo Semántico", "En declaracion struct: " +this.id, this.linea, this.column))
                 console.log("Error semántico en Declaracion struct: "+ this.id+" linea: " + this.linea +" column: " +this.column) 
             }
             
         }else{
+            Errores.push(new nodoError("Tipo Semántico", "En declaracion struct: " +this.id, this.linea, this.column))
             console.log("Error semántico en Declaracion struct: "+ this.id+" linea: " + this.linea +" column: " +this.column)
         }
     }

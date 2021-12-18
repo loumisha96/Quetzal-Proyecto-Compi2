@@ -4,6 +4,7 @@ var Ast = /** @class */ (function () {
         this.instrucciones = instrucciones;
         this.structs = []
         this.funciones =[]
+        
     }
     Ast.prototype.existeStruct = function(id){
         for(var i=0; i<this.structs.length; i++){
@@ -29,9 +30,8 @@ var Ast = /** @class */ (function () {
             if(id==fn.getID()){
                 return true
             }
-            else
-                return false
         }
+        return false
     }
     Ast.prototype.getFuncion = function(id){
         for(var i=0; i<this.funciones.length; i++){

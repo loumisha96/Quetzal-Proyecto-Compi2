@@ -15,7 +15,18 @@ var elseif_ = /** @class */ (function () {
                 if(valor){
                     const nuevoEnt = new Entorno(entorno)
                     this.instrucciones.forEach(instruccion => {
-                        instruccion.ejecutar(nuevoEnt, ast)
+                        if(instruccion.tipo != tipoInstr.ReturnE && instruccion.tipo != tipoInstr.Call)
+                            instruccion.ejecutar(entorno,ast)
+                        else{
+                            retorna = instruccion.ejecutar(entorno,ast)
+                           /* if(fn.tipoFuncion==Primitivo.int && typeof retorna =="number"){
+                                retorna = re
+                            }else if(fn.tipo==Primitivo.String && typeof retorna =="string")
+                                retorna = re
+                            else if(fn.tipo==Primitivo.boolean && typeof retorna =="boolean")
+                                retorna = re*/
+                            
+                        }
                     });
                 }else{
                      const nuevoEnt = new Entorno(entorno)
@@ -23,6 +34,8 @@ var elseif_ = /** @class */ (function () {
                         els.ejecutar(nuevoEnt, ast)
                     });
                 }
+            }else{
+                Errores.push(new nodoError("Tipo Semántico", "conodición no booleana: " +valor, this.linea, this.column))
             }
         });
         

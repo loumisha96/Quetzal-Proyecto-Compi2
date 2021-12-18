@@ -1,5 +1,6 @@
 var asignacionAttrb = /** @class */ (function () {
     function asignacionAttrb(id, id1, expr, linea, column, tipo) {
+        
         this.id = id;
         this.id1 = id1;
         this.expr = expr;
@@ -14,6 +15,8 @@ var asignacionAttrb = /** @class */ (function () {
             if(st.existeAttrb(this.id1)){
 
             }
+        }else{
+            Errores.push(new nodoError("Tipo Semántico", "En declaracion de atributo id: " +this.id, this.linea, this.column))
         }
     }
     return asignacionAttrb;

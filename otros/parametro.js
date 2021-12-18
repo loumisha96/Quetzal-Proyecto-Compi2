@@ -1,5 +1,6 @@
 var parametro = /** @class */ (function () {
     function parametro(tipoParametro, id, array, linea, column, tipo) {
+        
         this.tipoParametro = tipoParametro;
         this.id = id;
         this.array = array;
@@ -14,7 +15,7 @@ var parametro = /** @class */ (function () {
             var simb = new Simbolo(this.tipo, this.id, this.linea, this.column, this.getValorDefault())
             entorno.agregar(this.id,simb)
         }else{
-            console.log("Error semántico en Declaracion id: "+ this.id+" linea: " + this.linea +" column: " +this.column)
+           // Errores.push(new nodoError("Tipo Semántico", "Tipado no permitido", "", this.linea, this.column))
         }
         
     }

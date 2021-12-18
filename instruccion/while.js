@@ -1,5 +1,6 @@
 var while_ = /** @class */ (function () {
     function while_(condiciones, instrucciones, linea, column, tipo, entorno) {
+        
         this.condiciones = condiciones;
         this.instrucciones = instrucciones;
         this.linea = linea;
@@ -21,6 +22,8 @@ var while_ = /** @class */ (function () {
                 }else{
                      return
                 }
+            }else{
+                Errores.push(new nodoError("Tipo Semántico", "En declaracion id: " +this.id, this.linea, this.column))
             }
         });
     }

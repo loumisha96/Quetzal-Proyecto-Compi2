@@ -1,5 +1,6 @@
 var logica = /** @class */ (function () {
     function logica(expr1, operador, expr2, linea, column, tipo, entorno) {
+        
         this.expr1 = expr1;
         this.operador = operador;
         this.expr2 = expr2;
@@ -32,17 +33,38 @@ var logica = /** @class */ (function () {
         if(this.expr1.length>0){
             this.expr1.forEach(e => {
                 valor1 = e.getValorImplicito(entorno,ast)
+                if(e.tipo == tipoInstr.Call){
+                    valor1 = e.ejecutar(entorno,ast)
+                }else{
+                    valor1 = e.getValorImplicito(entorno, ast)
+                }
            });
         }else{
-            valor1 = this.expr1.getValorImplicito(entorno,ast)
+            valor1 = -1
+            if(this.expr1.tipo == tipoInstr.Call){
+                valor1 = this.expr1.ejecutar(entorno,ast)
+            }else{
+                valor1 = this.expr1.getValorImplicito(entorno, ast)
+            }
         }
         
         if(this.expr2.length>0){
             this.expr2.forEach(e => {
-                valor2 = e.getValorImplicito(entorno,ast)
+                valor2 = -1
+
+                if(e.tipo == tipoInstr.Call){
+                    valor2 = e.ejecutar(entorno,ast)
+                }else{
+                    valor2 = e.getValorImplicito(entorno, ast)
+                }
             });
         }else{
             valor2 = this.expr2.getValorImplicito(entorno, ast)
+            if(this.expr2.tipo == tipoInstr.Call){
+                valor2 = this.expr2.ejecutar(entorno,ast)
+            }else{
+                valor2 = this.expr2.getValorImplicito(entorno, ast)
+            }
         }
         
         
@@ -51,14 +73,16 @@ var logica = /** @class */ (function () {
             
             switch (this.operador) {
                 case logica.and:
-                    return  (valor1 && valor2)? this.valor = true :  this.valor =false
+                    return  (valor1 && valor2)?  true : false
                 case logica.or:
-                    return  (valor1 || valor2)? this.valor = true :  this.valor =false
+                    return  (valor1 || valor2)?  true :  false
                 case logica.or:
-                    return  (!valor1)? this.valor = true :  this.valor =false
+                    return  (!valor1)?  true :  false
                 default:
                     break;
             }
+        }else{
+            Errores.push(new nodoError("Tipo Semántico", "Valo no boolean", "", this.linea, this.column))
         }
     }
     return logica;

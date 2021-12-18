@@ -1,10 +1,12 @@
 var main = /** @class */ (function () {
     function main(tipoMain, instrucciones, linea, column, tipo) {
+        
         this.tipoMain = tipoMain;
         this.instrucciones = instrucciones;
         this.linea = linea;
         this.column = column;
         this.tipo = tipo;
+        
        // this.entorno = entorno;
     };
 

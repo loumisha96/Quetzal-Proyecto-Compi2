@@ -23,6 +23,7 @@ var Simbolo = /** @class */ (function () {
         return this.valor;
     };
     Simbolo.prototype.setValor = function(val){
+        
         this.valor = val
     }
     Simbolo.prototype.getValor = function(){

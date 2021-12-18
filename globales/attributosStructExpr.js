@@ -1,5 +1,6 @@
 var attributosStructExpr = /** @class */ (function () {
     function attributosStructExpr(TipoAttrb, id, expr, linea, column, tipo, entorno) {
+        
         this.TipoAttrb = TipoAttrb;
         this.id = id;
         this.expr = expr;
