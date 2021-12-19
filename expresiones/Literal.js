@@ -12,10 +12,15 @@ var Literal = /** @class */ (function () {
         if(this.tipo == Valor.id){
             const sim = entorno.getSimbolo(this.valor)
            // const lit = sim.getValor()
-            if(typeof sim =="object")
-                return sim.getValorImplicito(entorno,ast)
-            else
-                return sim
+           if(sim!=null){
+                if(typeof sim =="object")
+                     return sim.getValorImplicito(entorno,ast)
+                else
+                    return sim
+           }else{
+               return "%%%"
+           }
+            
         }else if(this.tipo == Valor.negativo){
             if(typeof this.valor =="object")
                 return this.valor.getValorImplicito(entorno,ast)*-1
@@ -47,10 +52,13 @@ var Literal = /** @class */ (function () {
                 return true;
             case Valor.null:
                 return true
-        
-            default:
-                return false;
         }
+    }
+    Literal.prototype.get3D = function(entorno, ast){
+        var codigo3D =this.valor;
+        
+        
+        return codigo3D
     }
     
     return Literal;

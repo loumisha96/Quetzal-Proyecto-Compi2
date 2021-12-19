@@ -2,7 +2,7 @@
 
 
 %lex
-%options case-insensitive
+%options case-sensitive
 %s                                  comment
 %%
 "//".*                              /* skip comments */
@@ -56,6 +56,12 @@
 "boolean"	return 'boolean';
 "char"		return 'char';
 "String"	return 'String';
+//"string"	return 'string';
+"parse" 	return 'parse';
+
+"toInt" 	return 'toInt';
+"toDouble" 	return 'toDouble';
+"typeof" 	return 'typeof';
 "struct"	return 'struct';
 "break"		return 'break';
 "return"	return 'return';
@@ -146,10 +152,14 @@ GLOBAL
 DECLARACION
 		:TIPO corcheteIzq corcheteDer id equal corcheteIzq VARIABLES corcheteDer{$$ = new nodo("DECLARACION", [$1,$2,$3,$4,$5,$6,$7,$8])}
 		|id id equal id parIzq VARIABLES parDer									{$$ = new nodo("DECLARACION", [$1,$2,$3,$4,$5,$6,$7])}
-		|TIPO id equal CALL														{$$ = new nodo("DECLARACION", [$1,$2,$3,$4])}
-		|TIPO id equal E 														{$$ = new nodo("DECLARACION", [$1,$2,$3,$4])}
+		|TIPO  DEC CALL															{$$ = new nodo("DECLARACION", [$1,$2[0],$2[1],$3])}
+		|TIPO DEC E 															{$$ = new nodo("DECLARACION", [$1,$2[0],$2[1],$3])}
 		|TIPO IDS 																{$$ = new nodo("DECLARACION", [$1,$2])}
 		|id id 																	{$$ = new nodo("DECLARACION", [$1,$2])}
+;
+
+DEC
+	:id equal																	{$$=[$1,$2]}
 ;
 
 TIPO
@@ -158,6 +168,7 @@ TIPO
 		|boolean																{$$ = new nodo("TIPO", [$1]),$1}
 		|char																	{$$ = new nodo("TIPO", [$1]),$1}
 		|String																	{$$ = new nodo("TIPO", [$1]),$1}
+		|void																	{$$ = new nodo("TIPO", [$1]),$1}
 ;
 
 
@@ -192,21 +203,16 @@ IDS
 ;
 
 FUNCION 
-		:TIPOF parIzq PARAMETROS parDer llaIzq INSTRUCCIONES llaDer  		{$$ = new nodo("FUNCION", [$1[0],$1[1],$3,$3,$5,$6,$7])}
-		|TIPOF parIzq parDer llaIzq INSTRUCCIONES llaDer             		{$$ = new nodo("FUNCION", [$1[0],$1[1],$3,$3,$5,$6])}
-		|TIPOF parIzq PARAMETROS parDer llaIzq llaDer             			{$$ = new nodo("FUNCION", [$1[0],$1[1],$3,$3,$5,$6])}
-		|TIPOF parIzq parDer llaIzq llaDer							    	{$$ = new nodo("FUNCION", [$1[0],$1[1],$3,$3,$5])}
+		:TIPO FUNC PARAMETROS parDer llaIzq INSTRUCCIONES llaDer  		{$$ = new nodo("FUNCION", [$1,$2[0],$2[1],$3,$4,$5,$6,$7])}
+		|TIPO FUNC parDer llaIzq INSTRUCCIONES llaDer             		{$$ = new nodo("FUNCION", [$1,$2[0],$2[1],$3,$4,$5,$6])}
+		|TIPO FUNC PARAMETROS parDer llaIzq llaDer             			{$$ = new nodo("FUNCION", [$1,$2[0],$2[1],$3,$4,$5,$6])}
+		|TIPO FUNC parDer llaIzq llaDer							    	{$$ = new nodo("FUNCION", [$1,$2[0],$2[1],$3,$4,$5])}
 ;
 
-
-TIPOF
-	:int id																		{$$=[Primitivo.int, $2]}						
-	|void id																	{$$=[tipoF.void, $2]}
-	|id id																		{$$=[$1, $2]}
-	|double id																	{$$=[Primitivo.double, $2]; }
-	|String	id																	{$$=[Primitivo.string, $2]; }
-
+FUNC
+	:id parIzq																{$$=[$1,$2]}
 ;
+
 PARAMETROS
 		:PARAMETROS comma PARAMETRO    											{$$ = new nodo("PARAMETROS", [$1,$2,$3])}
 		|PARAMETRO																{$$ = new nodo("PARAMETROS", [$1])}
@@ -218,17 +224,6 @@ PARAMETRO
 
 STRUCT		
 		:struct id llaIzq ATRIBUTOS llaDer 										{$$ = new nodo("STRUCT", [$1,$2,$3,$4,$5])}
-;
-
-TIPO2
-	:id																			{$$ = new nodo("TIPO2", [$1])}
-	|TIPO																		{$$ = new nodo("TIPO2", [$1])}
-	|void 																		{$$ = new nodo("TIPO2", [$1])}
-;
-TIPO3
-	:id	main																		{$$ = new nodo("TIPO2", [$1,$2])}
-	|TIPO main																	{$$ = new nodo("TIPO2", [$1,$2])}
-	|void main																		{$$ = new nodo("TIPO2", [$1,$2])}
 ;
 
 ATRIBUTOS
@@ -243,8 +238,8 @@ ATRIBUTO
 ;
 
 MAIN
-		:TIPO3 main parIzq parDer llaIzq INSTRUCCIONES llaDer 					{$$ = new nodo("MAIN", [$1,$2,$3,$4,$5,$6,$7])}
-		|TIPO3 main parIzq parDer llaIzq llaDer							 		{$$ = new nodo("MAIN", [$1,$2,$3,$4,$5,$6])}
+		:TIPO main parIzq parDer llaIzq INSTRUCCIONES llaDer 					{$$ = new nodo("MAIN", [$1,$2,$3,$4,$5,$6,$7])}
+		|TIPO main parIzq parDer llaIzq llaDer							 		{$$ = new nodo("MAIN", [$1,$2,$3,$4,$5,$6])}
 		
 ;
 
@@ -386,7 +381,9 @@ E
 		|E concat E 															{$$ = new nodo("E", [$1,$2,$3])}
 		|minus E            %prec menosU                                        {$$ = new nodo("E", [$1,$2])}
 		|E                                                                      {$$ = new nodo("E", [$1])}
-		|CALL
+		|CALL																	{$$ = new nodo ("E", [$1])}
+		|sqrt parIzq E parDer													{$$=new nodo("E", [$1,$2,$3,$4])}	
+		| E COND E 																{$$ = new nodo("E", [$1,$2,$3])}
 ;
 
 NATIVA
@@ -397,6 +394,13 @@ NATIVA
 	|E point toLowercase parIzq parDer					 						{$$ = new nodo("NATIVA", [$1,$2,$3,$4,$5])}
 	|E point pop parIzq  parDer						 							{$$ = new nodo("NATIVA", [$1,$2,$3,$4,$5])}
 	|E point push parIzq E parDer						  						{$$ = new nodo("NATIVA", [$1,$2,$3,$4,$5,$6])}
+	|int point parse parIzq E parDer											{$$ = new nodo("NATIVA", [$1,$2,$3,$4,$5,$6])}
+	|double  point parse parIzq E parDer										{$$ = new nodo("NATIVA", [$1,$2,$3,$4,$5,$6])}
+	|boolean point parse parIzq E parDer										{$$ = new nodo("NATIVA", [$1,$2,$3,$4])}
+	|toInt parIzq E parDer														{$$ = new nodo("NATIVA", [$1,$2,$3,$4])}
+	|toDouble parIzq E parDer													{$$ = new nodo("NATIVA", [$1,$2,$3,$4])}
+	|string parIzq E parDer														{$$ = new nodo("NATIVA", [$1,$2,$3,$4])}
+	|typeof parIzq E parDer														{$$ = new nodo("NATIVA", [$1,$2,$3,$4])}
 ;
 
 

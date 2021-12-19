@@ -2,7 +2,7 @@
 
 
 %lex
-%options case-insensitive
+%options sensitive
 %s                                  comment
 %%
 "//".*                              /* skip comments */
@@ -39,6 +39,8 @@
 "&"			return 'concat';
 "/"         return 'div';
 "%"         return 'mod';
+"parse"     return 'parse';
+
 "main"		return 'main';
 "begin"		return 'begin';
 "end"       return 'end';
@@ -56,6 +58,11 @@
 "boolean"	return 'boolean';
 "char"		return 'char';
 "String"	return 'String';
+"string"	return 'string';
+
+"toInt" 	return 'toInt';
+"toDouble" 	return 'toDouble';
+"typeof" 	return 'typeof';
 "struct"	return 'struct';
 "break"		return 'break';
 "return"	return 'return';
@@ -81,8 +88,9 @@
 /*Espacios en blanco*/
 [ \r\t]+     {}       
 \n           {}   
-[0-9]+("."[0-9]+)?  return  'decimal'; 
-[0-9]+                      return  'digits';
+[0-9]+("."[0-9]+)\b  return  'decimal'; 
+[0-9]+\b             return  'digits';
+
 
 (\"({EscapeQuot}|[^"])*\")|("'""({EscapeApos}|[^'])*""'") return 'cadena';
 [A-Za-z_][A-Za-z_0-9]*	    return 'id';
@@ -90,15 +98,15 @@
 
 <<EOF>>                 return 'EOF';
 .       {
-        console.error('Error');
+         Errores.push(new nodoError("Tipo Semántico", "Variable ya creada: "+this.id, "", this.linea, this.column))
 }
 /lex
 
 
 /* Asociación de operadores y precedencia */
 %left 'add', 'minus' /*binary*/
-%left  'div', 'asterisk'
-%left 'pot', 'mod'
+%left 'mod', 'div', 'asterisk'
+%left 'pot'
 
 
 
@@ -192,8 +200,8 @@ VARIABLES
 
 VALOR 
 		:cadena																	{$$ = new Literal($1, this._$.first_line,this._$.first_column, Valor.cadena)}
-		|digits																	{$$ = new Literal(parseInt($1), this._$.first_line,this._$.first_column, Valor.digito)}
-		|decimal																{$$ = new Literal(parseInt($1), this._$.first_line,this._$.first_column, Valor.decimal)}
+		|digits																	{$$ = new Literal(parseInt($1), this._$.first_line,this._$.first_column, Valor.digito); }
+		|decimal																{$$ = new Literal(parseFloat($1), this._$.first_line,this._$.first_column, Valor.decimal) ;}
 		|null																	{$$ = new Literal($1, this._$.first_line,this._$.first_column, Valor.null)}
 ;
 
@@ -264,10 +272,10 @@ INSTRUCCION
 		|DOWHILE																{$$=$1}
 		|FOREACH																{$$=$1}
 		|TERNARIO 																{$$=$1}
-		|break																{$$= new Break(this._$.first_line,this._$.first_column, tipoInstr.Break)}
-		|return	E 														{$$= new Return($2, this._$.first_line,this._$.first_column, tipoInstr.ReturnE)}
-		|return	CALL 														{$$= new Return($2, this._$.first_line,this._$.first_column, tipoInstr.Call)}
-		|return		  														{$$= new Return(null, this._$.first_line,this._$.first_column, tipoInstr.Return)}
+		|break																	{$$= new Break(this._$.first_line,this._$.first_column, tipoInstr.Break)}
+		|return	E 																{$$= new Return($2, this._$.first_line,this._$.first_column, tipoInstr.ReturnE)}
+		|return	CALL 															{$$= new Return($2, this._$.first_line,this._$.first_column, tipoInstr.Call)}
+		|return		  															{$$= new Return(null, this._$.first_line,this._$.first_column, tipoInstr.Return)}
 		|E																		{$$ = $1}
 ;
 
@@ -392,16 +400,25 @@ E
 		|E                                                                      {$$=$1}
 		//|PANICO
 		|CALL        															 {$$=$1}
+		|sqrt parIzq E parDer													{$$ = new Aritmetica($3, operador.sqrt, null, this._$.first_line,this._$.first_column); }
+		| E COND E 
 ;
 
 NATIVA
-	:E point caracterOfPosition parIzq E parDer   					 			{$$= new nativa($1, $5, null, this._$.first_line,this._$.first_column, Nativa.caracterOfPosition)}
-	|E point subString parIzq E comma E parDer			  						{$$= new nativa($1, $5, $7, this._$.first_line,this._$.first_column, Nativa.subString)}
-	|E point length parIzq parDer						 						{$$= new nativa($1,null, null, this._$.first_line,this._$.first_column, Nativa.length)}
-	|E point toUppercase parIzq parDer					 						{$$= new nativa($1,null, null, this._$.first_line,this._$.first_column, Nativa.toUppercase)}
-	|E point toLowercase parIzq parDer					 						{$$= new nativa($1,null, null, this._$.first_line,this._$.first_column, Nativa.toLowercase)}
-	|E point pop parIzq  parDer						 							{$$= new nativa($1, null, $7, this._$.first_line,this._$.first_column, Nativa.pop)}
-	|E point push parIzq E parDer						  						{$$= new nativa($1, $5, $7, this._$.first_line,this._$.first_column, Nativa.push)}
+	:E point caracterOfPosition parIzq E parDer   					 			{$$= new nativa($1, $5, null, this._$.first_line,this._$.first_column, Nativa.caracterOfPosition, tipoInstr.Nativa)}
+	|E point subString parIzq E comma E parDer			  						{$$= new nativa($1, $5, $7, this._$.first_line,this._$.first_column, Nativa.subString, tipoInstr.Nativa)}
+	|E point length parIzq parDer						 						{$$= new nativa($1,null, null, this._$.first_line,this._$.first_column, Nativa.length, tipoInstr.Nativa)}
+	|E point toUppercase parIzq parDer					 						{$$= new nativa($1,null, null, this._$.first_line,this._$.first_column, Nativa.toUppercase, tipoInstr.Nativa)}
+	|E point toLowercase parIzq parDer					 						{$$= new nativa($1,null, null, this._$.first_line,this._$.first_column, Nativa.toLowercase, tipoInstr.Nativa)}
+	|E point pop parIzq  parDer						 							{$$= new nativa($1, null, $7, this._$.first_line,this._$.first_column, Nativa.pop, tipoInstr.Nativa)}
+	|E point push parIzq E parDer						  						{$$= new nativa($1, $5, $7, this._$.first_line,this._$.first_column, Nativa.push, tipoInstr.Nativa)}
+	|int point parse parIzq E parDer											{$$= new nativa($5,null,  null, this._$.first_line,this._$.first_column, Nativa.intParse, tipoInstr.Nativa)}
+	|double  point parse parIzq E parDer										{$$= new nativa($5,null,  null, this._$.first_line,this._$.first_column, Nativa.doubleParse, tipoInstr.Nativa)}
+	|boolean point parse parIzq E parDer										{$$= new nativa($5,null,  null, this._$.first_line,this._$.first_column, Nativa.booleanParse, tipoInstr.Nativa)}
+	|toInt parIzq E parDer														{$$= new nativa($3,null,  null, this._$.first_line,this._$.first_column, Nativa.toInt, tipoInstr.Nativa)}
+	|toDouble parIzq E parDer													{$$= new nativa($3,null,  null, this._$.first_line,this._$.first_column, Nativa.toDouble, tipoInstr.Nativa)}
+	|string parIzq E parDer														{$$= new nativa($3,null,  null, this._$.first_line,this._$.first_column, Nativa.string, tipoInstr.Nativa)}
+	|typeof parIzq E parDer														{$$= new nativa($3,null,  null, this._$.first_line,this._$.first_column, Nativa.typeof, tipoInstr.Nativa)}
 	//|PANICO
 ;
 
@@ -451,11 +468,12 @@ LOGICA
 ;
 
 PRINT
-		:print parIzq EXPRESIONES parDer												{$$ = new Print($3,0,null,this._$.first_line,this._$.first_column) }
-		|print parIzq CALL parDer											{$$ = new Print($3,0,null,this._$.first_line,this._$.first_column) }
-		|print parIzq E comma E parDer										{$$ = new Print($3,0, $5, this._$.first_line,this._$.first_column) }
-		|println parIzq E parDer											{$$ = new Print($3,1,null, this._$.first_line,this._$.first_column) }
-		|println parIzq E comma E parDer									{$$ = new Print($3,1,$5, this._$.first_line,this._$.first_column) }
+		:print parIzq EXPRESIONES parDer									{$$ = new Print($3,0,null,this._$.first_line,this._$.first_column, tipoInstr.Print) }
+		|print parIzq CALL parDer											{$$ = new Print($3,0,null,this._$.first_line,this._$.first_column, tipoInstr.Print) }
+		|print parIzq E comma E parDer										{$$ = new Print($3,0, $5, this._$.first_line,this._$.first_column, tipoInstr.Print) }
+		|println parIzq E parDer											{$$ = new Print($3,1,null, this._$.first_line,this._$.first_column, tipoInstr.Print) }
+		|println parIzq E comma E parDer									{$$ = new Print($3,1,$5, this._$.first_line,this._$.first_column, tipoInstr.Print) }
+	//	|println parIzq EXPRESIONES parDer									{$$ = new Print($3,1,null, this._$.first_line,this._$.first_column, tipoInstr.Print) }
 		//|PANICO
 ;
 

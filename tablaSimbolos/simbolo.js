@@ -1,12 +1,12 @@
 "use strict";
 var Simbolo = /** @class */ (function () {
-    function Simbolo(tipo, id, linea, columna, valor) {
+    function Simbolo(tipo, id, linea, columna, valor, entorno) {
         this.identificador = id;
         this.linea = linea;
         this.columna = columna;
         this.tipo = tipo;
         this.valor = valor;
-       // this.Entorno = Entorno;
+        this.Entorno = entorno;
     }
     Simbolo.prototype.getTipo = function (ent, arbol) {
         return this.tipo;

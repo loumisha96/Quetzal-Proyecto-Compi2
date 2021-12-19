@@ -22,7 +22,7 @@ var DeclaracionVarios = /** @class */ (function () {
     }
 
     DeclaracionVarios.prototype.getValorDefault = function(){
-        switch (this.tipo) {
+        switch (this.tipoVarios) {
             case Primitivo.int:
                 return 0;
             case Primitivo.double:

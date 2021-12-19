@@ -14,7 +14,7 @@ var Funcion = /** @class */ (function () {
     }
     Funcion.prototype.ejecutar=function(entorno,ast){
         this.parametros.forEach(param => {
-            param.ejecutar(entorno,ast)
+            param.ejecutar(entorno,ast,"funcion "+this.id)
         });
     }
     return Funcion;

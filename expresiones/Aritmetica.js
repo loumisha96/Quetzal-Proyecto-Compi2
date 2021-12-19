@@ -36,15 +36,17 @@ var Aritmetica = /** @class */ (function () {
     Aritmetica.prototype.getValorImplicito = function(entorno, ast){
         
         var valor1 =this.getValor(entorno, ast, this.expr1)
-        var valor2 = this.getValor(entorno, ast, this.expr2)
+        if(this.operador !=operador.sqrt)
+            var valor2 = this.getValor(entorno, ast, this.expr2)
+        else
+            valor2=-1
        
         if (typeof valor1 == 'number' && typeof valor2 == 'number'){
             
-            if(isNaN(valor1) || isNaN(valor2)){
-            //    console.log(entorno)
-            }
+            
             switch (this.operador) {
                 case operador.suma:
+                    
                     return this.valor = valor1 + valor2;
                 case operador.multiplicacion:
                     return this.valor = valor1 * valor2;
@@ -58,6 +60,8 @@ var Aritmetica = /** @class */ (function () {
                     return this.valor = valor1 % valor2;
                 case operador.potencia:
                     return this.valor = Math.pow(valor1, valor2)
+                case operador.sqrt:
+                    return this.valor = Math.sqrt(valor1)
 
             }
    
@@ -66,6 +70,18 @@ var Aritmetica = /** @class */ (function () {
             Errores.push(new nodoError("Error Semántico","Tipos no permitidos", "",this.linea, this.column))
         }
 
+    }
+    Aritmetica.prototype.get3D=function(){
+        var codigo3D =""
+        switch (this.operador) {
+            case operador.suma:
+                codigo3D+=this.expr1.get3D()+"+"+this.expr2.get3D()
+                break;
+        
+            default:
+                break;
+        }
+        return codigo3D
     }
     return Aritmetica;
 }())

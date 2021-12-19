@@ -39,6 +39,7 @@ var tipoInstr;
     tipoInstr[tipoInstr["Ternario"] = 25] = "Ternario";
     tipoInstr[tipoInstr["Elseif"] = 26] = "Elseif";
     tipoInstr[tipoInstr["Else"] = 27] = "Else";
+    tipoInstr[tipoInstr["Nativa"] = 28] = "Nativa";
    // tipoInstr[tipoInstr["ReturnE"] = 8] = "ReturnE";
 })(tipoInstr || (tipoInstr = {}));
 
@@ -103,6 +104,7 @@ var operador;
     operador[operador["equalEqual"] = 14] = "equalEqual";
     operador[operador["increment"] = 15] = "increment";
     operador[operador["decrement"] = 16] = "decrement";
+    operador[operador["sqrt"] = 17] = "sqrt";
    
     
 })(operador || (operador = {}));
@@ -117,6 +119,13 @@ var Nativa;
     Nativa[Nativa["toLowercase"] = 4] = "toLowercase";
     Nativa[Nativa["pop"] = 5] = "pop";
     Nativa[Nativa["push"] = 6] = "push";
+    Nativa[Nativa["intParse"] = 7] = "intParse";
+    Nativa[Nativa["doubleParse"] = 8] = "doubleParse";
+    Nativa[Nativa["booleanParse"] = 9] = "booleanParse";
+    Nativa[Nativa["toInt"] = 10] = "toInt";
+    Nativa[Nativa["toDouble"] = 11] = "toDouble";
+    Nativa[Nativa["string"] = 12] = "string";
+    Nativa[Nativa["typeof"] = 13] = "typeof";
     
     
 })(Nativa || (Nativa = {}));

@@ -1,12 +1,15 @@
 "use strict";
 
 var Entorno = /** @class */ (function () {
-    function Entorno(anterior) {
+    function Entorno(anterior, name) {
         this.tabla = {};
         this.anterior = anterior;
+        this.siguiente = []
+        this.name= name
     }
     Entorno.prototype.agregar = function (id, simbolo) {
        // id = id.toLowerCase();
+       tablaS.push(simbolo)
         simbolo.identificador = simbolo.identificador.toLowerCase();
         this.tabla[id] = simbolo;
     };

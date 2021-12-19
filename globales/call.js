@@ -46,9 +46,9 @@ var call = /** @class */ (function () {
                         var re = instr.ejecutar(nuevoE,ast)
                         if(fn.tipoFuncion==Primitivo.int && typeof re =="number"){
                             retorna = re
-                        }else if(fn.tipo==Primitivo.String && typeof re =="string")
+                        }else if(fn.tipoFuncion==Primitivo.String && typeof re =="string")
                             retorna = re
-                        else if(fn.tipo==Primitivo.boolean && typeof re =="boolean")
+                        else if(fn.tipoFuncion==Primitivo.boolean && typeof re =="boolean")
                             retorna = re
                         else
                             Errores.push(new nodoError("Tipo Semántico", "Funcion retorna tipo no valido " +this.id,"llamada a funcion", this.linea, this.column))
