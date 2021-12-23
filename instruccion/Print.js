@@ -12,7 +12,7 @@ var Print = /** @class */ (function () {
     Print.prototype.ejecutar = function(entorno, ast){
         var valor =-1
         
-        if(this.expr.tipo == tipoInstr.Call){
+        if(this.expr.tipo == tipoInstr.Call || this.expr.tipo == tipoInstr.Ternario){
             valor = this.expr.ejecutar(entorno,ast)
         }else{
             if(this.expr.length>0){
@@ -21,8 +21,12 @@ var Print = /** @class */ (function () {
                     //this.formato(e)
                     valor = e.getValorImplicito(entorno,ast)
                 });
-            }else
-             valor = this.expr.getValorImplicito(entorno, ast)
+            }else{
+                
+                    valor = this.expr.getValorImplicito(entorno, ast)
+                
+            }
+             
         }
         if(typeof valor == "object" && entorno.existe(valor) ){
             var sim = entorno.getSimbolo(valor)
@@ -90,13 +94,13 @@ var Print = /** @class */ (function () {
 
         if(this.expr2!=null){
             
-           console.log(valor+valor2)
-          //  editor_2.setValue(valor+valor2)
+           //console.log(valor+valor2)
+            salida +=valor+valor2+"\n"
         }
         
         else{
-            console.log(valor)
-            //editor_2.setValue(valor)
+         //   console.log(valor)
+            salida +=valor+"\n"
         }
             
         if(this.ln==1)

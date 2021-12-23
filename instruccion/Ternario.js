@@ -9,18 +9,26 @@ var Ternario = /** @class */ (function () {
         this.tipo = tipo;
     }
     Ternario.prototype.ejecutar = function(entorno, ast){
-        this.condiciones.forEach(cond => {
-            var valor = cond.getValorImplicito(entorno,ast)
-            if (typeof valor == 'boolean'){
-                if(valor){
-                    this.expr1.ejecutar(entorno,ast)
+        var cadena =-1;
+        try {
+            
+            this.condiciones.forEach(cond => {
+                var valor = cond.getValorImplicito(entorno,ast)
+                if (typeof valor == 'boolean'){
+                    if(valor){
+                    cadena = this.expr1.getValorImplicito(entorno,ast)
+                    }else{
+                    cadena =  this.expr2.getValorImplicito(entorno,ast)
+                    }
+                    throw BreakException;
                 }else{
-                    this.expr2.ejecutar(entorno,ast)
+                    Errores.push(new nodoError("Tipo Semántico", "En declaracion id: " +this.id, this.linea, this.column))
                 }
-            }else{
-                Errores.push(new nodoError("Tipo Semántico", "En declaracion id: " +this.id, this.linea, this.column))
-            }
-        });
+            });
+        } catch (error) {
+            
+        }
+        return cadena
     }
     return Ternario;
 }());

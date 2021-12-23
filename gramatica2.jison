@@ -10,6 +10,9 @@
 <comment>"*/"                       this.popState();
 <comment>.                          /* skip comment content*/
 "*"         return 'asterisk';
+"double.parse"	return 'doubleParse';
+"int.parse"	return 'intParse';
+"boolean.parse"	return 'booleanParse';
 "."         return 'point';
 "("         return 'parIzq';
 ")"         return 'parDer';
@@ -146,9 +149,9 @@ GLOBALES
 ;
 GLOBAL	
 		:FUNCION																{$$ = new nodo("GLOBAL", [$1]); p.getGramatica("GLOBAL",1)}
-		|DECLARACION 															{$$ = new nodo("GLOBAL", [$1]); p.getGramatica("GLOBAL",2)}
-		|ASIGNACION																{$$ = new nodo("GLOBAL", [$1]); p.getGramatica("GLOBAL",3)}
-		|STRUCT																	{$$ = new nodo("GLOBAL", [$1]); p.getGramatica("GLOBAL",4)}
+		|DECLARACION ptcoma														{$$ = new nodo("GLOBAL", [$1,$2]); p.getGramatica("GLOBAL",2)}
+		|ASIGNACION	ptcoma													{$$ = new nodo("GLOBAL", [$1,$2]); p.getGramatica("GLOBAL",3)}
+		//|STRUCT																	{$$ = new nodo("GLOBAL", [$1]); p.getGramatica("GLOBAL",4)}
 		
 ;
 
@@ -253,20 +256,20 @@ INSTRUCCIONES
 
 INSTRUCCION
 		:GLOBAL       															{$$ = new nodo("INSTRUCCION", [$1]); p.getGramatica("INSTRUCCION",1)}
-		|CALL																	{$$ = new nodo("INSTRUCCION", [$1]); p.getGramatica("INSTRUCCION",2)}
+		|CALL ptcoma																{$$ = new nodo("INSTRUCCION", [$1,$2]); p.getGramatica("INSTRUCCION",2)}
 		|IF 																	{$$ = new nodo("INSTRUCCION", [$1]); p.getGramatica("INSTRUCCION",3)}
 		|FOR 																	{$$ = new nodo("INSTRUCCION", [$1]); p.getGramatica("INSTRUCCION",4)}
-		|PRINT																	{$$ = new nodo("INSTRUCCION", [$1]); p.getGramatica("INSTRUCCION",5)}
+		|PRINT	ptcoma																{$$ = new nodo("INSTRUCCION", [$1,$2]); p.getGramatica("INSTRUCCION",5)}
 		|WHILE 																	{$$ = new nodo("INSTRUCCION", [$1]); p.getGramatica("INSTRUCCION",6)}
 		|SWITCH 																{$$ = new nodo("INSTRUCCION", [$1]); p.getGramatica("INSTRUCCION",7)}
-		|DOWHILE																{$$ = new nodo("INSTRUCCION", [$1]); p.getGramatica("INSTRUCCION",8)}
+		|DOWHILE ptcoma															{$$ = new nodo("INSTRUCCION", [$1,$2]); p.getGramatica("INSTRUCCION",8)}
 		|FOREACH																{$$ = new nodo("INSTRUCCION", [$1]); p.getGramatica("INSTRUCCION",9)}
-		|TERNARIO 																{$$ = new nodo("INSTRUCCION", [$1]); p.getGramatica("INSTRUCCION",10)}
-		|break																	{$$ = new nodo("INSTRUCCION", [$1]); p.getGramatica("INSTRUCCION",11)}
-		|return	E																{$$ = new nodo("INSTRUCCION", [$1,$2]); p.getGramatica("INSTRUCCION",12)}
-		|return		  															{$$ = new nodo("INSTRUCCION", [$1]); p.getGramatica("INSTRUCCION",13)}
+		|TERNARIO ptcoma																{$$ = new nodo("INSTRUCCION", [$1,$2]); p.getGramatica("INSTRUCCION",10)}
+		|break	ptcoma																{$$ = new nodo("INSTRUCCION", [$1]); p.getGramatica("INSTRUCCION",11)}
+		|return	E	ptcoma															{$$ = new nodo("INSTRUCCION", [$1,$2]); p.getGramatica("INSTRUCCION",12)}
+		|return	ptcoma	  															{$$ = new nodo("INSTRUCCION", [$1]); p.getGramatica("INSTRUCCION",13)}
 		|E																		{$$ = new nodo("INSTRUCCION", [$1]); p.getGramatica("INSTRUCCION",14)}
-		|return CALL
+		|return CALL ptcoma                                                    {$$ = new nodo("INSTRUCCION", [$1,$2, $3]); p.getGramatica("INSTRUCCION",14)}
 ;
 
 CALL
@@ -275,7 +278,7 @@ CALL
 ;
 
 TERNARIO
-	: parIzq CONDICIONES parDer interrogacion INSTRUCCION colon INSTRUCCION  	{$$ = new nodo("TERNARIO", [$1,$2,$3,$4,$5,$6,$7]); p.getGramatica("TERNARIO",1)}
+	: CONDICIONES interrogacion INSTRUCCION colon INSTRUCCION  	{$$ = new nodo("TERNARIO", [$1,$2,$3,$4,$5]); p.getGramatica("TERNARIO",1)}
 ;
 
 IF 
@@ -343,6 +346,7 @@ FORVAR1
 		|E menorIgual E 														{$$ = new nodo("FORVAR1", [$1,$2,$3]); p.getGramatica("FORVAR1",3)}
 		|E mayorIgual E 														{$$ = new nodo("FORVAR1", [$1,$2,$3]); p.getGramatica("FORVAR1",4)}
 		|E equal E  															{$$ = new nodo("FORVAR1", [$1,$2,$3]); p.getGramatica("FORVAR1",5)}
+		|E                                                                       {$$ = new nodo("FORVAR1", [$1]); p.getGramatica("FORVAR1",5)}
 ;
 
 FORVAR2
@@ -387,7 +391,8 @@ E
 		|E                                                                      {$$ = new nodo("E", [$1]); p.getGramatica("E",21)}
 		|CALL																	{$$ = new nodo ("E", [$1]); p.getGramatica("E",22)}
 		|sqrt parIzq E parDer													{$$=new nodo("E", [$1,$2,$3,$4]); p.getGramatica("E",23)}	
-		| E COND E 																{$$ = new nodo("E", [$1,$2,$3]); p.getGramatica("E",24)}
+		|CONDICIONES 																{$$ = new nodo("E", [$1]); p.getGramatica("E",24)}
+		|TERNARIO																{$$ = new nodo("E", [$1]); p.getGramatica("E",24)}
 ;
 
 NATIVA
@@ -398,9 +403,9 @@ NATIVA
 	|E point toLowercase parIzq parDer					 						{$$ = new nodo("NATIVA", [$1,$2,$3,$4,$5]); p.getGramatica("NATIVA",5)}
 	|E point pop parIzq  parDer						 							{$$ = new nodo("NATIVA", [$1,$2,$3,$4,$5]); p.getGramatica("NATIVA",6)}
 	|E point push parIzq E parDer						  						{$$ = new nodo("NATIVA", [$1,$2,$3,$4,$5,$6]); p.getGramatica("NATIVA",7)}
-	|int point parse parIzq E parDer											{$$ = new nodo("NATIVA", [$1,$2,$3,$4,$5,$6]); p.getGramatica("NATIVA",8)}
-	|double  point parse parIzq E parDer										{$$ = new nodo("NATIVA", [$1,$2,$3,$4,$5,$6]); p.getGramatica("NATIVA",9)}
-	|boolean point parse parIzq E parDer										{$$ = new nodo("NATIVA", [$1,$2,$3,$4]); p.getGramatica("NATIVA",10)}
+	|intParse parIzq E parDer											{$$ = new nodo("NATIVA", [$1,$2,$3,$4]); p.getGramatica("NATIVA",8)}
+	|doubleParse parIzq E parDer										{$$ = new nodo("NATIVA", [$1,$2,$3,$4]); p.getGramatica("NATIVA",9)}
+	|booleanParse parIzq E parDer										{$$ = new nodo("NATIVA", [$1,$2,$3,$4]); p.getGramatica("NATIVA",10)}
 	|toInt parIzq E parDer														{$$ = new nodo("NATIVA", [$1,$2,$3,$4]); p.getGramatica("NATIVA",11)}
 	|toDouble parIzq E parDer													{$$ = new nodo("NATIVA", [$1,$2,$3,$4]); p.getGramatica("NATIVA",12)}
 	|string parIzq E parDer														{$$ = new nodo("NATIVA", [$1,$2,$3,$4]); p.getGramatica("NATIVA",13)}

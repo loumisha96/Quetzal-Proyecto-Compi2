@@ -272,7 +272,7 @@ INSTRUCCION
 		|PRINT 	ptcoma																{$$=$1}
 		|WHILE 																	{$$=$1}
 		|SWITCH 																{$$=$1}
-		|DOWHILE																{$$=$1}
+		|DOWHILE ptcoma															{$$=$1}
 		|FOREACH																{$$=$1}
 		|TERNARIO 	ptcoma															{$$=$1}
 		|break	ptcoma																{$$= new Break(this._$.first_line,this._$.first_column, tipoInstr.Break)}
@@ -289,7 +289,7 @@ CALL
 ;
 
 TERNARIO
-	: parIzq CONDICIONES parDer interrogacion INSTRUCCION colon INSTRUCCION  	{$$= new Ternario($2, $5, $7,this._$.first_line,this._$.first_column, tipoInstr.Ternario)}
+	:  CONDICIONES interrogacion INSTRUCCION colon INSTRUCCION  		{$$= new Ternario($1, $3, $5,this._$.first_line,this._$.first_column, tipoInstr.Ternario)}
 ;
 
 IF 
@@ -307,9 +307,9 @@ ELSES
 ;
 
 ELSE 
-		:else if parIzq CONDICIONES parDer llaIzq llaDer  					    {$$ = new elseif($4, [], this._$.first_line,this._$.first_column, tipoInstr.Elseif)}
-		|else if parIzq CONDICIONES parDer llaIzq INSTRUCCIONES llaDer  	    {$$ = new elseif($4, $7, this._$.first_line,this._$.first_column, tipoInstr.Elseif)}
-		|else if parIzq CONDICIONES parDer INSTRUCCION 						    {$$ = new elseif($4, [$6], this._$.first_line,this._$.first_column, tipoInstr.Elseif)}
+		:else if parIzq CONDICIONES parDer llaIzq llaDer  					    {$$ = new elseif_($4, [], this._$.first_line,this._$.first_column, tipoInstr.Elseif)}
+		|else if parIzq CONDICIONES parDer llaIzq INSTRUCCIONES llaDer  	    {$$ = new elseif_($4, $7, this._$.first_line,this._$.first_column, tipoInstr.Elseif)}
+		|else if parIzq CONDICIONES parDer INSTRUCCION 						    {$$ = new elseif_($4, [$6], this._$.first_line,this._$.first_column, tipoInstr.Elseif)}
 		|else llaIzq INSTRUCCIONES llaDer										{$$ = new else_($3, this._$.first_line,this._$.first_column, tipoInstr.Else)}							
 		|else INSTRUCCION 											  		    {$$ = new else_([$2], this._$.first_line,this._$.first_column, tipoInstr.Else)}							
 		|else llaIzq llaDer														{$$ = new else_([], this._$.first_line,this._$.first_column, tipoInstr.Else)}							
@@ -360,6 +360,7 @@ FORVAR1
 		|E menorIgual E 														{$$ = new relacional($1,operador.menorIgual, $3, this._$.first_line,this._$.first_column)}
 		|E mayorIgual E 														{$$ = new relacional($1,operador.mayorIgual, $3, this._$.first_line,this._$.first_column)}
 		|E equal E  															{$$ = new relacional($1,operador.equal, $3, this._$.first_line,this._$.first_column)}
+		|E																		{$$=$1}
 ;
 
 FORVAR2
@@ -404,7 +405,8 @@ E
 		//|PANICO
 		|CALL        															 {$$=$1}
 		|sqrt parIzq E parDer													{$$ = new Aritmetica($3, operador.sqrt, null, this._$.first_line,this._$.first_column); }
-		| CONDICIONES 
+		| CONDICIONES 															{$$=$1}
+		|TERNARIO															{$$=$1}
 ;
 
 NATIVA
@@ -415,8 +417,8 @@ NATIVA
 	|E point toLowercase parIzq parDer					 						{$$= new nativa($1,null, null, this._$.first_line,this._$.first_column, Nativa.toLowercase, tipoInstr.Nativa)}
 	|E point pop parIzq  parDer						 							{$$= new nativa($1, null, $7, this._$.first_line,this._$.first_column, Nativa.pop, tipoInstr.Nativa)}
 	|E point push parIzq E parDer						  						{$$= new nativa($1, $5, $7, this._$.first_line,this._$.first_column, Nativa.push, tipoInstr.Nativa)}
-	|doubleParse parIzq  E parDer												{$$= new nativa($5,null,  null, this._$.first_line,this._$.first_column, Nativa.intParse, tipoInstr.Nativa)}
-	|intParse parIzq   E parDer													{$$= new nativa($5,null,  null, this._$.first_line,this._$.first_column, Nativa.doubleParse, tipoInstr.Nativa)}
+	|intParse parIzq  E parDer												{$$= new nativa($5,null,  null, this._$.first_line,this._$.first_column, Nativa.intParse, tipoInstr.Nativa)}
+	|doubleParse parIzq   E parDer													{$$= new nativa($5,null,  null, this._$.first_line,this._$.first_column, Nativa.doubleParse, tipoInstr.Nativa)}
 	|booleanParse parIzq  E parDer												{$$= new nativa($5,null,  null, this._$.first_line,this._$.first_column, Nativa.booleanParse, tipoInstr.Nativa)}
 	|toInt parIzq E parDer														{$$= new nativa($3,null,  null, this._$.first_line,this._$.first_column, Nativa.toInt, tipoInstr.Nativa)}
 	|toDouble parIzq E parDer													{$$= new nativa($3,null,  null, this._$.first_line,this._$.first_column, Nativa.toDouble, tipoInstr.Nativa)}
