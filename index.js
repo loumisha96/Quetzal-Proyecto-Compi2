@@ -46,7 +46,8 @@ function parsear(){
     p.produccion =[]
     tablaS =[]
     var contenido = editor_1.getValue()
-    editor_2.setValue("")
+    salida = ""
+    editor_2.setValue(salida)
     if (contenido!=""){
         
         instrucciones =gramatica.parse(contenido);
