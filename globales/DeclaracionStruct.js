@@ -17,12 +17,12 @@ var DeclaracionStruct = /** @class */ (function () {
                 entorno.agregar(this.id,simb)
             }else{
                 Errores.push(new nodoError("Tipo Semántico", "En declaracion struct: " +this.id, this.linea, this.column))
-                console.log("Error semántico en Declaracion struct: "+ this.id+" linea: " + this.linea +" column: " +this.column) 
+            //    console.log("Error semántico en Declaracion struct: "+ this.id+" linea: " + this.linea +" column: " +this.column) 
             }
             
         }else{
             Errores.push(new nodoError("Tipo Semántico", "En declaracion struct: " +this.id, this.linea, this.column))
-            console.log("Error semántico en Declaracion struct: "+ this.id+" linea: " + this.linea +" column: " +this.column)
+           // console.log("Error semántico en Declaracion struct: "+ this.id+" linea: " + this.linea +" column: " +this.column)
         }
     }
     return DeclaracionStruct;

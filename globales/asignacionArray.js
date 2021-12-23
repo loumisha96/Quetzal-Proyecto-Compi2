@@ -16,7 +16,7 @@ var asignacionArray = /** @class */ (function () {
             sim.setValor(this.valores)
         }else{
             Errores.push(new nodoError("Tipo Semántico", "En declaracion id: " +this.id, this.linea, this.column))
-            console.log("Error semántico en Asignacion id: "+ this.id+" linea: " + this.linea +" column: " +this.column)
+        //    console.log("Error semántico en Asignacion id: "+ this.id+" linea: " + this.linea +" column: " +this.column)
         }
     }
     return asignacionArray;

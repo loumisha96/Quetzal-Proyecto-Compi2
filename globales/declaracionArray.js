@@ -15,7 +15,7 @@ var DeclaracionArray = /** @class */ (function () {
             entorno.agregar(this.id,simb)
         }else{
             Errores.push(new nodoError("Tipo Semántico", "En declaracion id: " +this.id, this.linea, this.column))
-            console.log("Error semántico en Declaracion id: "+ variable+" linea: " + this.linea +" column: " +this.column)
+           // console.log("Error semántico en Declaracion id: "+ variable+" linea: " + this.linea +" column: " +this.column)
         }
     }
     return DeclaracionArray;

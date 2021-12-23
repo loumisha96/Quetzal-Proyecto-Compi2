@@ -23,7 +23,7 @@ var Atributo = /** @class */ (function () {
                     var simb = new Simbolo(this.tipoAttrb, this.id, this.linea, this.column,null)
                     entorno.agregar(this.id,simb)
                 }else{
-                    console.log("Error semántico en Struct id: "+ this.tipoAttrb+" linea: " + this.linea +" column: " +this.column)
+                  //  console.log("Error semántico en Struct id: "+ this.tipoAttrb+" linea: " + this.linea +" column: " +this.column)
                 }
             }
 

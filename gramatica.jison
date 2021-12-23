@@ -139,7 +139,7 @@ S
 		|MAIN GLOBALES 														{$$ = [$1,$2] }
 		|GLOBALES MAIN 					  								  	{$$ = [$1,$2] }
 		|GLOBALES MAIN GLOBALES 											{$$ = [$1,$2,$3] }
-//		|PANICO																{$$=[$1]}
+		|PANICO																{}
 ;
 
 

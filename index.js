@@ -46,8 +46,9 @@ function parsear(){
     p.produccion =[]
     tablaS =[]
     var contenido = editor_1.getValue()
-
+    editor_2.setValue("")
     if (contenido!=""){
+        
         instrucciones =gramatica.parse(contenido);
         const astt = new Ast(instrucciones)
         

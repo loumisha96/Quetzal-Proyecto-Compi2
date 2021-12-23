@@ -17,7 +17,7 @@ var AsignacionExpr = /** @class */ (function () {
             sim.setValor(this.expresion.getValorImplicito(entorno,ast))*/
         }else{
             Errores.push(new nodoError("Tipo Semántico", "En asignacion id: " +this.id, this.linea, this.column))
-            console.log("Error semántico en Asignacion id: "+ this.id+" linea: " + this.linea +" column: " +this.column)
+          //  console.log("Error semántico en Asignacion id: "+ this.id+" linea: " + this.linea +" column: " +this.column)
         }
     }
 

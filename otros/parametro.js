@@ -16,7 +16,7 @@ var parametro = /** @class */ (function () {
             entorno.agregar(this.id,simb)
         }else{
             Errores.push(new nodoError("Tipo Semántico", "Variable ya creada: "+this.id, "", this.linea, this.column))
-            console.log("Tipo Semántico", "Variable ya creada: "+this.id, "")
+        //    console.log("Tipo Semántico", "Variable ya creada: "+this.id, "")
         }
         
     }
