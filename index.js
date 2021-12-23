@@ -46,7 +46,7 @@ function parsear(){
     p.produccion =[]
     tablaS =[]
     var contenido = editor_1.getValue()
-    salida = ""
+    salida = "    "
     editor_2.setValue(salida)
     if (contenido!=""){
         
