@@ -22,12 +22,15 @@ function newArista(from, to){//creacion de aristas
 function graficar(ast){
     
     i=0;
+    var x =0;
    padre = ast;
     if (padre.name!=null){
-        newNodo(i,padre.name);
+        newNodo(x,padre.name);
         for (const n in padre.children){//si el nodo padre tiene hijos
             bandera=false;
-            RecorrerChildren(padre.children[n],i-1)
+
+            RecorrerChildren(padre.children[n],0)
+
         }
     }
     
@@ -37,14 +40,21 @@ function graficar(ast){
         edges: aristas
     };
     var opciones = {//estética del grafo
+        //width: "100%", // El ancho del lienzo. Pueden ser porcentajes o píxeles
+       
         layout:{
+            improvedLayout:true,
             hierarchical:{
+            
+                direction:'UD',
                 levelSeparation:100,
                 nodeSpacing:100,
-                parentCentralization:true,
-                
+                parentCentralization:true
+                //sortMethod: 'hubsize'
             }
         }
+        
+
     };
     var graf = new vis.Network(contenedor, datos,opciones);//muestra grafo
     
@@ -73,3 +83,4 @@ function RecorrerChildren(actual,padre_id){
         }
     }
 }
+

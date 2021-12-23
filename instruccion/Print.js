@@ -18,7 +18,7 @@ var Print = /** @class */ (function () {
             if(this.expr.length>0){
                 this.expr.forEach(e => {
                     
-                    this.formato(e)
+                    //this.formato(e)
                     valor = e.getValorImplicito(entorno,ast)
                 });
             }else
@@ -27,6 +27,8 @@ var Print = /** @class */ (function () {
         if(typeof valor == "object" && entorno.existe(valor) ){
             var sim = entorno.getSimbolo(valor)
             valor =sim.getValorImplicito(entorno, ast)
+        }else if (typeof valor == "object"){
+            valor = valor.getValorImplicito(entorno, ast)
         }
         var valor2=-1
         if(this.expr2!=null)
@@ -34,6 +36,8 @@ var Print = /** @class */ (function () {
         if(typeof valor2 == "object" && entorno.existe(valor2) ){
             var sim = entorno.getSimbolo(valor2)
             valor2 =sim.getValorImplicito(entorno, ast)
+        }else if (typeof valor2 == "object"){
+            valor2 =valor2.getValorImplicito(entorno, ast)
         }
         
         if(typeof valor =="string"){
@@ -84,11 +88,17 @@ var Print = /** @class */ (function () {
         }
 
 
-        if(this.expr2!=null)
+        if(this.expr2!=null){
+            
+           console.log(valor+valor2)
+          //  editor_2.setValue(valor+valor2)
+        }
         
-            console.log(valor+valor2)
-        else
+        else{
             console.log(valor)
+            //editor_2.setValue(valor)
+        }
+            
         if(this.ln==1)
             console.log("\n")
             

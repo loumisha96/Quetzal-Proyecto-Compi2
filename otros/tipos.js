@@ -105,6 +105,7 @@ var operador;
     operador[operador["increment"] = 15] = "increment";
     operador[operador["decrement"] = 16] = "decrement";
     operador[operador["sqrt"] = 17] = "sqrt";
+    operador[operador["pot"] = 18] = "pot";
    
     
 })(operador || (operador = {}));

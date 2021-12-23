@@ -13,8 +13,14 @@ var relacional = /** @class */ (function () {
         var val =-1
         if(expr.tipo == tipoInstr.Call){
             val = expr.ejecutar(entorno,ast)
-        }else{
-            val = expr.getValorImplicito(entorno, ast)
+        }else {
+            if(expr.length>0){
+                expr.forEach(e => {
+                    val = e.getValorImplicito(entorno,ast)
+                });
+            }else{
+                val = expr.getValorImplicito(entorno,ast)
+            }
         }
         if(typeof val == "object" ){
             

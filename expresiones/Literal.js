@@ -9,7 +9,12 @@ var Literal = /** @class */ (function () {
     };
 
     Literal.prototype.getValorImplicito=function(entorno,ast){
-        if(this.tipo == Valor.id){
+
+        if(this.valor=="true"|| this.valor=="false"){
+            return eval(this.valor)
+        }else if(this.tipo == Valor.id){
+
+            
             const sim = entorno.getSimbolo(this.valor)
            // const lit = sim.getValor()
            if(sim!=null){

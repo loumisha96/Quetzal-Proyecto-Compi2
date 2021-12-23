@@ -9,7 +9,7 @@ var Entorno = /** @class */ (function () {
     }
     Entorno.prototype.agregar = function (id, simbolo) {
        // id = id.toLowerCase();
-       tablaS.push(simbolo)
+        tablaS.push(simbolo)
         simbolo.identificador = simbolo.identificador.toLowerCase();
         this.tabla[id] = simbolo;
     };

@@ -20,7 +20,12 @@ var Aritmetica = /** @class */ (function () {
         if(expr.tipo == tipoInstr.Call){
             val = expr.ejecutar(entorno,ast)
         }else{
-            val = expr.getValorImplicito(entorno, ast)
+            if(expr.length>0){
+                expr.forEach(e => {
+                    val = e.getValorImplicito(entorno, ast)
+                });
+            }else
+                val = expr.getValorImplicito(entorno, ast)
         }
 
         if(typeof val == "object"  ){
@@ -62,10 +67,21 @@ var Aritmetica = /** @class */ (function () {
                     return this.valor = Math.pow(valor1, valor2)
                 case operador.sqrt:
                     return this.valor = Math.sqrt(valor1)
+                
 
             }
    
             
+        }else if(typeof valor1 == 'string' && typeof valor2 == 'number'){
+            if(operador.pot== this.operador){
+
+                var aux = valor1.replaceAll("\"",'')
+                valor1=""
+                for(var i=0; i<valor2; i++){
+                    valor1 += aux
+                }
+                return this.valor = "\""+valor1+"\""
+            }
         }else{
             Errores.push(new nodoError("Error Semántico","Tipos no permitidos", "",this.linea, this.column))
         }

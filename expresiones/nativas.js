@@ -18,7 +18,7 @@ var nativa = /** @class */ (function () {
             if(typeof this.id1 =="object" && entorno.existe(this.id1.valor)){
                 sim = entorno.getSimbolo(this.id1.valor)
                 var cadena = sim.getValorImplicito(entorno, ast)
-                cadena = cadena.replaceAll("\"",'') //animal
+               // cadena = cadena.replaceAll("\"",'') //animal
                 if(this.expr1!=null){
                     var v = this.expr1.getValorImplicito(entorno, ast)
                     if(typeof v =="string"){
@@ -35,7 +35,18 @@ var nativa = /** @class */ (function () {
                 var cadena = this.id1.ejecutar(entorno, ast)
                 return this.ejecutarNat(cadena, entorno, ast)
             }else if(this.tipo == tipoInstr.Nativa){
-                var cadena = this.id1.getValorImplicito(entorno,ast)
+                var cadena=-1
+                if(typeof this.id1 != "object"  ){
+                    cadena = this.id1.getValorImplicito(entorno,ast)
+                }else if(this.id1.length>0){
+                    this.id1.forEach(e => {
+                        cadena = e.getValorImplicito(entorno,ast)
+                    });
+                     
+                }
+                    
+
+                
                 return this.ejecutarNat(cadena, entorno, ast)
             }
             else if(this.isCadena()){
